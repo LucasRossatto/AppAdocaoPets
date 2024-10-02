@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_adocaopets/view/CreateAccount_Screen.dart';
+import 'package:flutter_adocaopets/view/Home.screen.dart';
 import 'package:flutter_adocaopets/view/Sign_In_Screen.dart';
 
 void main() {
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const SignInScreen(),
+      home: const HomeScreen(),
     );
   }
 }
