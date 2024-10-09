@@ -10,13 +10,13 @@ class EmailField extends StatelessWidget {
       height: 60,
       child: TextField(
         decoration: InputDecoration(
-          filled: true, // Habilita a cor de fundo
+          filled: true, 
           fillColor: Colors.white,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0), // Raio da borda
+            borderRadius: BorderRadius.circular(16.0), 
             borderSide: BorderSide(
-              color: Color(0xFFEBF0F0), // Cor da borda
-              width: 4.0, // Largura da borda
+              color: Color(0xFFEBF0F0),
+              width: 4.0, 
             ),
           ),
           label: Text(
@@ -25,11 +25,11 @@ class EmailField extends StatelessWidget {
               color: Colors.grey[600],
               shadows: [
                 Shadow(
-                  color: Colors.grey, // Choose the color of the shadow
+                  color: Colors.grey, 
                   blurRadius:
-                      1.0, // Adjust the blur radius for the shadow effect
+                      1.0, 
                   offset: Offset(2.0,
-                      2.0), // Set the horizontal and vertical offset for the shadow
+                      2.0), 
                 ),
               ],
             ),

@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/Mock/Pets_Fake_Db.dart';
+import 'package:flutter_adocaopets/view/CreatePet1.dart';
+import 'package:flutter_adocaopets/view/MyPets.dart';
 import 'package:flutter_adocaopets/widgets/card_pet.dart';
+import 'package:flutter_adocaopets/widgets/search.input.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_adocaopets/constants/images_assets.dart';
 import 'package:flutter_adocaopets/models/Pet_model.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,23 +26,73 @@ class HomeScreen extends StatelessWidget {
           Search_input(),
           Memorial_and_filter(),
           Cat_Container(),
-           Expanded(
-             child: Padding(
-               padding: const EdgeInsets.all(20.0),
-               child: MasonryGridView.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20,
-                      itemCount: appPets.length,
-                      itemBuilder: (context, index) {
-                        return CardPet(
-                          pet: appPets[index],
-                        );
-                      },
-                    ),
-             ),
-           ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: MasonryGridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 20,
+                itemCount: appPets.length,
+                itemBuilder: (context, index) {
+                  return CardPet(
+                    pet: appPets[index],
+                  );
+                },
+              ),
+            ),
+          ),
         ],
+      ),
+      bottomNavigationBar: BottomAppBarHome(),
+    );
+  }
+}
+
+class BottomAppBarHome extends StatelessWidget {
+  const BottomAppBarHome({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      child: SizedBox(
+        width: 100,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              onPressed: () {
+              },
+              icon:
+                  Image.asset('assets/icons/Home.png', width: 24, height: 24),
+            ),
+            IconButton(
+              onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>  Mypets(),
+                      ),
+                    );
+                  },
+              icon:
+                  Image.asset('assets/icons/Paw.png', width: 24, height: 24),
+            ),
+            IconButton(
+              onPressed: () {
+              },
+              icon: Image.asset('assets/icons/Message.png',
+                  width: 24, height: 24),
+            ),
+            IconButton(
+              onPressed: () {
+              },
+              icon: Image.asset('assets/icons/Person.png',
+                  width: 24, height: 24),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -163,52 +221,14 @@ class Memorial_and_filter extends StatelessWidget {
           IconButton(
             onPressed: () {},
             icon: Image.asset('assets/icons/Menu.png', width: 24, height: 24),
-          )
+          ),
         ],
       ),
     );
   }
 }
 
-class Search_input extends StatelessWidget {
-  const Search_input({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: SizedBox(
-        width: 364,
-        height: 60,
-        child: TextField(
-          decoration: InputDecoration(
-              filled: true, // Habilita a cor de fundo
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16.0), // Raio da borda
-                borderSide: BorderSide(
-                  color: Color.fromARGB(255, 255, 255, 255), // Cor da borda
-                  width: 4.0, // Largura da borda
-                ),
-              ),
-              label: Text(
-                'Search for pets, name, location...',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                ),
-              ),
-              suffixIcon: Image.asset(
-                appImages.SearchIcon,
-                width: 22,
-                height: 22,
-              )),
-        ),
-      ),
-    );
-  }
-}
 
 class Profle_Container_Row extends StatelessWidget {
   const Profle_Container_Row({

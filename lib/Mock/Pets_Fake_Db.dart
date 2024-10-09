@@ -5,5 +5,5 @@ List<PetModel> appPets = [
   PetModel(imagem: appImages.DogHome,nome: "Beige",likes: "1.680",),
   PetModel(imagem: appImages.Papagaio, nome: "Jeffry", likes: "1.100"),
   PetModel(imagem: appImages.Cachorro2, nome: "Thor", likes: "2.600"),
-  PetModel(imagem: appImages.Coelho, nome: "Flock", likes: "1.300")
+  PetModel(imagem: appImages.Coelho, nome: "Flock", likes: "1.300"),
 ];
