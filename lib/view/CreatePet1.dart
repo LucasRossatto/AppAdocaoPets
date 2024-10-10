@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_adocaopets/Mock/Pet_Categorie_Db.dart';
+import 'package:flutter_adocaopets/constants/images_assets.dart';
 import 'package:flutter_adocaopets/view/CreatePet2.dart';
-import 'package:flutter_adocaopets/widgets/card_pet_categorie.dart';
+import 'package:flutter_adocaopets/widgets/card_categorie_pet.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class Create_pet1 extends StatelessWidget {
+class Create_pet1 extends StatefulWidget {
   const Create_pet1({super.key});
 
+  @override
+  State<Create_pet1> createState() => _Create_pet1State();
+}
+
+class _Create_pet1State extends State<Create_pet1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,14 +27,22 @@ class Create_pet1 extends StatelessWidget {
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
           ),
-          Column(
-            children: [
-              first_row_categories(),
-              second_row_categories(),
-              third_row_categories(),
-            ],
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: MasonryGridView.count(
+                crossAxisCount: 3,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                itemCount: appPetCategorie.length,
+                itemBuilder: (context, index) {
+                  return CardCategoriePet(
+                    categorie: appPetCategorie[index],
+                  );
+                },
+              ),
+            ),
           ),
-          Spacer(),
           Next_btn()
         ],
       ),

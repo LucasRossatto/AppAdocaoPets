@@ -13,5 +13,16 @@ class appImages {
   static String PataIcon = "assets/icons/paw.png";
   static String Personicon = "assets/icons/Person.png";
   static String MessageIcon = "assets/icons/Message.png";
+}
 
+class appCategories {
+  static String Dog = "assets/icons/dogIcon.png";
+  static String Cat = "assets/icons/catIcon.png";
+  static String Rabbit = "assets/icons/rabbitIcon.png";
+  static String Rodent = "assets/icons/ratIcon.png";
+  static String Bird = "assets/icons/birdIcon.png";
+  static String Duck = "assets/icons/duckIcon.png";
+  static String Horse = "assets/icons/horseicon.png";
+  static String Fishes = "assets/icons/fishIcon.png";
+  static String Others = "assets/icons/Paw.png";
 }
