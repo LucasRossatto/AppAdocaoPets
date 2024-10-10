@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adocaopets/view/CreateAccount_Screen.dart';
-import 'package:flutter_adocaopets/view/CreatePet1.dart';
-import 'package:flutter_adocaopets/view/CreatePet2.dart';
+import 'package:flutter_adocaopets/view/Create_Account_Screen.dart';
+import 'package:flutter_adocaopets/view/Create_Pet1.dart';
+import 'package:flutter_adocaopets/view/Create_Pet2.dart';
+import 'package:flutter_adocaopets/view/Create_pet3.dart';
 import 'package:flutter_adocaopets/view/MyPets.dart';
 import 'package:flutter_adocaopets/view/Home.screen.dart';
 import 'package:flutter_adocaopets/view/Sign_In_Screen.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  Create_pet1(),
+      home:  Create_Pet3(),
     );
   }
 }

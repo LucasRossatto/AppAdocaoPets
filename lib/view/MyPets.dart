@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/Mock/Pets_Fake_Db.dart';
-import 'package:flutter_adocaopets/view/CreatePet1.dart';
+import 'package:flutter_adocaopets/view/Create_Pet1.dart';
 import 'package:flutter_adocaopets/view/Home.screen.dart';
 import 'package:flutter_adocaopets/widgets/card_horizontal_pet.dart';
 import 'package:flutter_adocaopets/widgets/search.input.dart';
@@ -126,7 +126,8 @@ class Title_and_CreatePetBtn_container extends StatelessWidget {
                     );
                   },
                   icon: Icon(Icons.add),
-                  color: Colors.white))
+                  color: Colors.white)
+                  )
         ],
       ),
     );

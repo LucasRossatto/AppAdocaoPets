@@ -13,6 +13,8 @@ class appImages {
   static String PataIcon = "assets/icons/paw.png";
   static String Personicon = "assets/icons/Person.png";
   static String MessageIcon = "assets/icons/Message.png";
+  static String CapIcon = "assets/images/Cap.png";
+  static String CalendarIcon = "assets/images/Calendar.png";
 }
 
 class appCategories {
