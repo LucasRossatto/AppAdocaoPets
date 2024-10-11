@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/Mock/Pets_Fake_Db.dart';
 import 'package:flutter_adocaopets/view/Create_Pet1.dart';
 import 'package:flutter_adocaopets/view/MyPets.dart';
+import 'package:flutter_adocaopets/view/Profile_screen.dart';
 import 'package:flutter_adocaopets/widgets/card_pet.dart';
 import 'package:flutter_adocaopets/widgets/search.input.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -86,7 +87,11 @@ class BottomAppBarHome extends StatelessWidget {
                   width: 24, height: 24),
             ),
             IconButton(
-              onPressed: () {
+              onPressed: () { Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Profile_Screen(),
+                    ),
+                  );
               },
               icon: Image.asset('assets/icons/Person.png',
                   width: 24, height: 24),

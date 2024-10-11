@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/Mock/Pets_Fake_Db.dart';
 import 'package:flutter_adocaopets/view/Create_Pet1.dart';
 import 'package:flutter_adocaopets/view/Home.screen.dart';
+import 'package:flutter_adocaopets/view/Profile_screen.dart';
 import 'package:flutter_adocaopets/widgets/card_horizontal_pet.dart';
 import 'package:flutter_adocaopets/widgets/search.input.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -55,12 +56,12 @@ class BottomApp extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>  HomeScreen(),
-                      ),
-                    );
-                  },
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(),
+                  ),
+                );
+              },
               icon: Image.asset(
                 'assets/icons/Home.png',
                 width: 24,
@@ -83,7 +84,13 @@ class BottomApp extends StatelessWidget {
                   width: 24, height: 24),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Profile_Screen(),
+                  ),
+                );
+              },
               icon:
                   Image.asset('assets/icons/Person.png', width: 24, height: 24),
             ),
@@ -121,13 +128,12 @@ class Title_and_CreatePetBtn_container extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) =>  Create_pet1(),
+                        builder: (context) => Create_pet1(),
                       ),
                     );
                   },
                   icon: Icon(Icons.add),
-                  color: Colors.white)
-                  )
+                  color: Colors.white))
         ],
       ),
     );
