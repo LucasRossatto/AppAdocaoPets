@@ -77,6 +77,10 @@ class Btns extends StatelessWidget {
               side: BorderSide(
                 color: Color(0xFFFC7171),
               ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                    16), // Altere o valor para ajustar o arredondamento
+              ),
             ),
             onPressed: () {},
             child: Row(
@@ -99,6 +103,10 @@ class Btns extends StatelessWidget {
               minimumSize: Size(182, 52),
               side: BorderSide(
                 color: Color(0xFF5250E1),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                    16), // Altere o valor para ajustar o arredondamento
               ),
             ),
             onPressed: () {},
