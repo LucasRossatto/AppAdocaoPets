@@ -35,35 +35,37 @@ class Create_Pet3 extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => Create_Pet3(),
+            padding: const EdgeInsets.all(10.0),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Create_Pet3(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(364, 60),
+                      backgroundColor: Color(0xFF5250E1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(364, 60),
-                    backgroundColor: Color(0xFF5250E1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Text(
+                      'Allow Access to library',
+                      style: TextStyle(
+                        fontSize: 16, // Tamanho da fonte
+                        fontWeight: FontWeight.bold, // Negrito
+                        color: Colors.white, // Cor do texto
+                      ),
                     ),
                   ),
-                  child: Text(
-                    'Allow Access to library',
-                    style: TextStyle(
-                      fontSize: 16, // Tamanho da fonte
-                      fontWeight: FontWeight.bold, // Negrito
-                      color: Colors.white, // Cor do texto
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Padding(

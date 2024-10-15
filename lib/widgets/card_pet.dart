@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adocaopets/constants/images_assets.dart';
 import 'package:flutter_adocaopets/models/Pet_model.dart';
 
 class CardPet extends StatelessWidget {

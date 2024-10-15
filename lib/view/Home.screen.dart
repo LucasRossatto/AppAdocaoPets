@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/Mock/Pets_Fake_Db.dart';
-import 'package:flutter_adocaopets/view/Create_Pet1.dart';
 import 'package:flutter_adocaopets/view/MyPets.dart';
 import 'package:flutter_adocaopets/view/Profile_screen.dart';
 import 'package:flutter_adocaopets/widgets/card_pet.dart';
 import 'package:flutter_adocaopets/widgets/search.input.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_adocaopets/constants/images_assets.dart';
-import 'package:flutter_adocaopets/models/Pet_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -242,58 +240,61 @@ class Profle_Container_Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 380,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ClipOval(
-                  child: Container(
-                    width: 48.0, // Largura do container
-                    height: 48.0, // Altura do container
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(appImages.DogProfile), // Imagem asset
-                        fit: BoxFit.cover, // Como a imagem deve se ajustar
+    return Padding(
+      padding: const EdgeInsets.only(right: 10,left: 10),
+      child: Container(
+        width: 380,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ClipOval(
+                    child: Container(
+                      width: 48.0, // Largura do container
+                      height: 48.0, // Altura do container
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(appImages.DogProfile), // Imagem asset
+                          fit: BoxFit.cover, // Como a imagem deve se ajustar
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                      child: Row(
-                    children: [
-                      Text(
-                        "Hello,",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        " Daisy!",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  )),
-                  Text(
-                    "Share your pet memorials",
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  )
-                ],
-              ),
-            ],
-          ),
-          Icon(
-            Icons.notifications_rounded,
-            size: 24,
-          )
-        ],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                        child: Row(
+                      children: [
+                        Text(
+                          "Hello,",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Text(
+                          " Daisy!",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    )),
+                    Text(
+                      "Share your pet memorials",
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    )
+                  ],
+                ),
+              ],
+            ),
+            Icon(
+              Icons.notifications_rounded,
+              size: 24,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -306,45 +307,48 @@ class Cat_Container extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 380,
-      height: 220,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(appImages.Cat), // Imagem asset
-            fit: BoxFit.cover, // Como a imagem deve se ajustar
-          ),
-          borderRadius: BorderRadius.circular(26)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.favorite,
-                  color: Color(0xFFFC7171),
-                  size: 24,
-                ),
-                Text(
-                  "1,268",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 20,right: 20),
+      child: Container(
+        width: 380,
+        height: 220,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(appImages.Cat), // Imagem asset
+              fit: BoxFit.cover, // Como a imagem deve se ajustar
             ),
-            Text(
-              "Ginger",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold),
-            )
-          ],
+            borderRadius: BorderRadius.circular(26)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.favorite,
+                    color: Color(0xFFFC7171),
+                    size: 24,
+                  ),
+                  Text(
+                    "1,268",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              Text(
+                "Ginger",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
         ),
       ),
     );

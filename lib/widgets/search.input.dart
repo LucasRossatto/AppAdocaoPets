@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/constants/images_assets.dart';
-import 'package:flutter_adocaopets/view/Home.screen.dart';
 
 class Search_input extends StatelessWidget {
   const Search_input({super.key});
@@ -8,7 +7,7 @@ class Search_input extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.only(top: 10,bottom: 10,left: 20,right: 20),
       child: SizedBox(
         width: 364,
         height: 60,

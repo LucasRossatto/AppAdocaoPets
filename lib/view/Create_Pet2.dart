@@ -9,85 +9,87 @@ class Create_pet2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 23),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Pet’s detail",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              children: [
-                Container(
-                    width: 66,
-                    height: 66,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Color(0xFFEBF0F0),
-                    ),
-                    child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.image_outlined),
-                        color: Colors.grey)
-                        ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    "Upload pet’s avatar",
-                    style: TextStyle(color: Color(0xFF5250E1), fontSize: 16),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 23),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Pet’s detail",
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Petname_input(),
-          Gender_input(),
-          Date_of_birth_input(),
-          Date_of_death_input(),
-          Breed_input(),
-          Description_input(),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => Create_Pet3(),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                children: [
+                  Container(
+                      width: 66,
+                      height: 66,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Color(0xFFEBF0F0),
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(145, 56),
-                    backgroundColor: Color(0xFF5250E1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.image_outlined),
+                          color: Colors.grey)
+                          ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      "Upload pet’s avatar",
+                      style: TextStyle(color: Color(0xFF5250E1), fontSize: 16),
                     ),
                   ),
-                  child: Text(
-                    'Next',
-                    style: TextStyle(
-                      fontSize: 16, // Tamanho da fonte
-                      fontWeight: FontWeight.bold, // Negrito
-                      color: Colors.white, // Cor do texto
-                    ),
-                  ),
-                )
-              ],
+                ],
+              ),
             ),
-          )
-        ],
+            Petname_input(),
+            Gender_input(),
+            Date_of_birth_input(),
+            Date_of_death_input(),
+            Breed_input(),
+            Description_input(),
+            Padding(
+              padding: const EdgeInsets.only(right: 20,bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Create_Pet3(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(145, 56),
+                      backgroundColor: Color(0xFF5250E1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    child: Text(
+                      'Next',
+                      style: TextStyle(
+                        fontSize: 16, // Tamanho da fonte
+                        fontWeight: FontWeight.bold, // Negrito
+                        color: Colors.white, // Cor do texto
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
