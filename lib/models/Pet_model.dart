@@ -9,6 +9,7 @@ class PetModel {
   final String habits;
   final String characteristics;
   final String favourite_food;
+  final String description;
 
   PetModel({
     required this.city,
@@ -21,5 +22,6 @@ class PetModel {
     required this.image,
     required this.name,
     required this.likes,
+    required this.description,
   });
 }

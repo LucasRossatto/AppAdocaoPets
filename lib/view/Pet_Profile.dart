@@ -54,7 +54,26 @@ class Pet_profile extends StatelessWidget {
               ),
             ),
             Btns(),
-            Description(),
+            Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+      child: Container(
+        width: 380,
+        height: 203,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Color(0xFF5BCF95),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(
+              style: TextStyle(color: Colors.white, fontSize: 16),
+              pet.description
+            ),
+          ),
+        ),
+      ),
+    ),
             Sub_desc_btns(),
             Padding(
               padding: const EdgeInsets.only(left: 20,right: 20,top: 10),
@@ -529,32 +548,3 @@ class Btns extends StatelessWidget {
   }
 }
 
-class Description extends StatelessWidget {
-  const Description({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-      child: Container(
-        width: 380,
-        height: 203,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Color(0xFF5BCF95),
-        ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text(
-              style: TextStyle(color: Colors.white, fontSize: 16),
-              "There was never a patch of sun that Ginger wasn’t to be found sleeping in! I’ve never known such a lazy yet loving cat.6 incredible years we shared together, you knew me better than I knew myself. Thank you for all the endless love. Miss you already.",
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
