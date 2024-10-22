@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/Mock/Pets_Fake_Db.dart';
 import 'package:flutter_adocaopets/view/MyPets.dart';
+import 'package:flutter_adocaopets/view/Pet_Profile.dart';
 import 'package:flutter_adocaopets/view/Profile_screen.dart';
 import 'package:flutter_adocaopets/widgets/card_pet.dart';
 import 'package:flutter_adocaopets/widgets/search.input.dart';
@@ -34,8 +35,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisSpacing: 20,
                 itemCount: appPets.length,
                 itemBuilder: (context, index) {
-                  return CardPet(
-                    pet: appPets[index],
+                  return GestureDetector(
+                    onTap: () {
+                       Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Pet_profile(
+                            pet: appPets[index],
+                          ),
+                        ),
+                      );
+                    },
+                    child: CardPet(
+                      pet: appPets[index],
+                    ),
                   );
                 },
               ),

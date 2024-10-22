@@ -12,7 +12,7 @@ class CardHorizontalPet extends StatelessWidget {
       height: 220,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(pet.imagem),
+          image: AssetImage(pet.image),
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.circular(26),
@@ -28,7 +28,7 @@ class CardHorizontalPet extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    pet.nome,
+                    pet.name,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 28,

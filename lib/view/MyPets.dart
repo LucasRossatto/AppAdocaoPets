@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/Mock/Pets_Fake_Db.dart';
 import 'package:flutter_adocaopets/view/Create_Pet1.dart';
 import 'package:flutter_adocaopets/view/Home.screen.dart';
+import 'package:flutter_adocaopets/view/Pet_Profile.dart';
 import 'package:flutter_adocaopets/view/Profile_screen.dart';
 import 'package:flutter_adocaopets/widgets/card_horizontal_pet.dart';
 import 'package:flutter_adocaopets/widgets/search.input.dart';
@@ -27,8 +28,19 @@ class Mypets extends StatelessWidget {
                 crossAxisSpacing: 20,
                 itemCount: appPets.length,
                 itemBuilder: (context, index) {
-                  return CardHorizontalPet(
-                    pet: appPets[index],
+                  return GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Pet_profile(
+                            pet: appPets[index],
+                          ),
+                        ),
+                      );
+                    },
+                    child: CardHorizontalPet(
+                      pet: appPets[index],
+                    ),
                   );
                 },
               ),

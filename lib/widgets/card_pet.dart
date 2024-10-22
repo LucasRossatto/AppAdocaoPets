@@ -15,8 +15,8 @@ class CardPet extends StatelessWidget {
       height: 270,
       decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(pet.imagem), // Imagem asset
-            fit: BoxFit.cover, // Como a imagem deve se ajustar
+            image: AssetImage(pet.image), // Imagem asset
+            fit: BoxFit.cover, 
           ),
           borderRadius: BorderRadius.circular(26)),
       child: Padding(
@@ -42,7 +42,7 @@ class CardPet extends StatelessWidget {
               ],
             ),
             Text(
-              pet.nome,
+              pet.name,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 28,
