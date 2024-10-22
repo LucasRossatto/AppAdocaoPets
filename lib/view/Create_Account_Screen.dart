@@ -83,10 +83,6 @@ class Text_Container extends StatelessWidget {
   }
 }
 
-
-
-
-
 class AppleBtn extends StatelessWidget {
   const AppleBtn({
     super.key,

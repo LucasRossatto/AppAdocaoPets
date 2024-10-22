@@ -20,7 +20,8 @@ class appImages {
   static String Cat4 = "assets/images/Cat4.png";
   static String Bird = "assets/images/Bird.png";
   static String Dog2 = "assets/images/Dog2.png";
-    static String NotFound = "assets/images/notFound_img.png";
+  static String NotFound = "assets/images/notFound_img.png";
+  static String Horse = "assets/images/horse.jpg";
 }
 
 class appCategories {
