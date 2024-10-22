@@ -12,7 +12,7 @@ class CardPet extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Container(
       width: 182,
-      height: 270,
+      height: 250,//antes era 270
       decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(pet.image), // Imagem asset

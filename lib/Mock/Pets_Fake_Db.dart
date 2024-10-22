@@ -130,6 +130,6 @@ List<PetModel> appPets = [
     habits: "Loves to run and jump.",
     characteristics: "Graceful and spirited.",
     favourite_food: "Oats and apples",
-    description: "Starlight is a spirited Arabian horse who enjoys galloping in open fields and showing off her agility."
+    description: "Jonas is a spirited Arabian horse who enjoys galloping in open fields and showing off her agility."
   ),
 ];

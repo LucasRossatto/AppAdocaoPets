@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Cat_Container(),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.only(left: 20,right: 20,top: 20),
               child: MasonryGridView.count(
                 crossAxisCount: 2,
                 mainAxisSpacing: 20,
