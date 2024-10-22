@@ -15,6 +15,11 @@ class appImages {
   static String MessageIcon = "assets/icons/Message.png";
   static String CapIcon = "assets/images/Cap.png";
   static String CalendarIcon = "assets/images/Calendar.png";
+  static String Cat2 = "assets/images/Cat2.png";
+  static String Cat3 = "assets/images/Cat3.png";
+  static String Cat4 = "assets/images/Cat4.png";
+  static String Bird = "assets/images/Bird.png";
+  static String Dog2 = "assets/images/Dog2.png";
 }
 
 class appCategories {

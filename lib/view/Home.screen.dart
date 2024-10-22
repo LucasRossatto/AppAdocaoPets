@@ -253,12 +253,12 @@ class Profle_Container_Row extends StatelessWidget {
                   padding: const EdgeInsets.all(10.0),
                   child: ClipOval(
                     child: Container(
-                      width: 48.0, // Largura do container
-                      height: 48.0, // Altura do container
+                      width: 48.0, 
+                      height: 48.0, 
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(appImages.DogProfile), // Imagem asset
-                          fit: BoxFit.cover, // Como a imagem deve se ajustar
+                          image: AssetImage(appImages.DogProfile), 
+                          fit: BoxFit.cover, 
                         ),
                       ),
                     ),
@@ -275,14 +275,14 @@ class Profle_Container_Row extends StatelessWidget {
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
-                          " Daisy!",
+                          " Lucas!",
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         )
                       ],
                     )),
                     Text(
-                      "Share your pet memorials",
+                      "Share your pets",
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     )
                   ],
