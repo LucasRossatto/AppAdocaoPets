@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_adocaopets/view/Sign_In_Screen.dart';
 import 'package:flutter_adocaopets/widgets/email_field.dart';
 import 'package:flutter_adocaopets/widgets/password_field.dart';
 import 'package:flutter_adocaopets/widgets/social_media_btns.dart';
@@ -42,11 +43,20 @@ class Dont_have_account_SignUp extends StatelessWidget {
             "Already have an account?",
             style: TextStyle(fontSize: 16),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Sign In",
-              style: TextStyle(fontSize: 16, color: Color(0xFF5250E1)),
+          GestureDetector(
+            onTap: (){
+              Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SignInScreen(),
+                      ),
+                    );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Sign In",
+                style: TextStyle(fontSize: 16, color: Color(0xFF5250E1)),
+              ),
             ),
           )
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/constants/images_assets.dart';
+import 'package:flutter_adocaopets/view/Create_Account_Screen.dart';
 import 'package:flutter_adocaopets/widgets/email_field.dart';
 import 'package:flutter_adocaopets/widgets/password_field.dart';
 import 'package:flutter_adocaopets/widgets/social_media_btns.dart';
@@ -28,11 +29,20 @@ class SignInScreen extends StatelessWidget {
                   "Already have an account?",
                   style: TextStyle(fontSize: 16),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(fontSize: 16, color: Color(0xFF5250E1)),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CreateaccountScreen(),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(fontSize: 16, color: Color(0xFF5250E1)),
+                    ),
                   ),
                 )
               ],
