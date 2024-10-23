@@ -4,8 +4,8 @@
 Este projeto foi uma atividade proposta na aula de Desenvolvimento Mobile pelo professor Samuel Santos, com o objetivo de aplicar os conhecimentos adquiridos em Flutter. É também meu primeiro projeto mobile! 📱.</p>
 
 ## Stack utilizada
-- [x]Flutter
-- [x]Emulador Android do Android Studio
+- [x] Flutter
+- [x] Emulador Android do Android Studio
 - [x] Pacote flutter_staggered_grid_view (para criar feeds dinâmicos)
 
 ### Features
