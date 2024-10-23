@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/constants/images_assets.dart';
 import 'package:flutter_adocaopets/view/Create_Account_Screen.dart';
+import 'package:flutter_adocaopets/view/Home.screen.dart';
 import 'package:flutter_adocaopets/widgets/email_field.dart';
 import 'package:flutter_adocaopets/widgets/password_field.dart';
 import 'package:flutter_adocaopets/widgets/social_media_btns.dart';
@@ -119,7 +120,13 @@ class Sign_In_Btn extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all(
                 Color(0xFF5250E1)), // Define a cor de fundo
           ),
-          onPressed: () {},
+          onPressed: () {
+             Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                    );
+          },
           child: Text(
             "Sign In",
             style: TextStyle(
