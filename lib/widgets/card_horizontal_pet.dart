@@ -5,6 +5,8 @@ class CardHorizontalPet extends StatelessWidget {
   final PetModel pet;
   const CardHorizontalPet({super.key, required this.pet});
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -12,7 +14,7 @@ class CardHorizontalPet extends StatelessWidget {
       height: 220,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(pet.image),
+          image: NetworkImage(pet.images.isNotEmpty ? pet.images[0] : 'default_image_url'), // Exibe a primeira imagem, ou uma imagem default
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.circular(26),
@@ -43,7 +45,7 @@ class CardHorizontalPet extends StatelessWidget {
                         size: 24,
                       ),
                       Text(
-                        pet.likes,
+                        pet.color,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,

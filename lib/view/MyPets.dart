@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adocaopets/Mock/Pets_Fake_Db.dart';
+import 'package:flutter_adocaopets/http/http_client.dart';
+import 'package:flutter_adocaopets/repositories/pet_repositoriy.dart';
+import 'package:flutter_adocaopets/stores/pet_store.dart';
 import 'package:flutter_adocaopets/view/Create_Pet1.dart';
 import 'package:flutter_adocaopets/view/Home.screen.dart';
 import 'package:flutter_adocaopets/view/Pet_Profile.dart';
@@ -8,8 +10,25 @@ import 'package:flutter_adocaopets/widgets/card_horizontal_pet.dart';
 import 'package:flutter_adocaopets/widgets/search.input.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class Mypets extends StatelessWidget {
+class Mypets extends StatefulWidget {
   Mypets({super.key});
+
+  @override
+  State<Mypets> createState() => _MypetsState();
+}
+
+class _MypetsState extends State<Mypets> {
+  final PetStore store = PetStore(
+    repository: PetRepository(
+      client: HttpClient(),
+    ),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    store.getPets();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,32 +39,76 @@ class Mypets extends StatelessWidget {
           Title_and_CreatePetBtn_container(),
           Search_input(),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: MasonryGridView.count(
-                crossAxisCount: 1,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                itemCount: appPets.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Pet_profile(
-                            pet: appPets[index],
-                          ),
-                        ),
-                      );
-                    },
-                    child: CardHorizontalPet(
-                      pet: appPets[index],
+            child: AnimatedBuilder(
+              animation:
+                  Listenable.merge([store.isLoading, store.erro, store.state]),
+              builder: (context, child) {
+                if (store.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (store.erro.value.isNotEmpty) {
+                  return Center(
+                    child: Text(
+                      store.erro.value,
+                      style: TextStyle(
+                        color: Colors.black12,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   );
-                },
-              ),
+                }
+
+                if (store.state.value.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "Nenhum item na lista",
+                      style: TextStyle(
+                        color: Colors.black12,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                } else {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    child: MasonryGridView.count(
+                      crossAxisCount: 1,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 20,
+                      itemCount: store.state.value.length,
+                      itemBuilder: (context, index) {
+                        final item = store.state.value[index];
+
+                        final petImage = item.images.isNotEmpty
+                            ? item.images[0]
+                            : 'assets/default_image.png'; // Imagem padrão
+
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Pet_profile(
+                                    pet: item,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: CardHorizontalPet(pet: item));
+                      },
+                    ),
+                  );
+                }
+              },
             ),
-          ),
+          )
         ],
       ),
       bottomNavigationBar: BottomApp(),
@@ -70,7 +133,7 @@ class BottomApp extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
+                    builder: (context) => HomeScreen(token: '',),
                   ),
                 );
               },

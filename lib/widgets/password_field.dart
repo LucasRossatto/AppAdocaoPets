@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PasswordField extends StatelessWidget {
-  const PasswordField({super.key});
+  const PasswordField({super.key, required TextEditingController controller});
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +25,6 @@ class PasswordField extends StatelessWidget {
                 'Password',
                 style: TextStyle(
                   color: Colors.grey[600],
-                  shadows: [
-                    Shadow(
-                      color: Colors.grey, // Choose the color of the shadow
-                      blurRadius:
-                          1.0, // Adjust the blur radius for the shadow effect
-                      offset: Offset(2.0,
-                          2.0), // Set the horizontal and vertical offset for the shadow
-                    ),
-                  ],
                 ),
               ),
               suffixIcon: Icon(

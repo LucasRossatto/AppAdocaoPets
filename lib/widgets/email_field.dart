@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EmailField extends StatelessWidget {
-  const EmailField({super.key});
+  const EmailField({super.key, required TextEditingController controller});
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +23,6 @@ class EmailField extends StatelessWidget {
             'Email',
             style: TextStyle(
               color: Colors.grey[600],
-              shadows: [
-                Shadow(
-                  color: Colors.grey, 
-                  blurRadius:
-                      1.0, 
-                  offset: Offset(2.0,
-                      2.0), 
-                ),
-              ],
             ),
           ),
         ),

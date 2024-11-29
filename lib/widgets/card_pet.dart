@@ -3,22 +3,24 @@ import 'package:flutter_adocaopets/models/Pet_model.dart';
 
 class CardPet extends StatelessWidget {
   final PetModel pet;
+
   const CardPet({
     super.key,
-    required this.pet
-    });
+    required this.pet,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       width: 182,
-      height: 250,//antes era 270
+      height: 250, // altura ajustada
       decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(pet.image), // Imagem asset
-            fit: BoxFit.cover, 
-          ),
-          borderRadius: BorderRadius.circular(26)),
+        image: DecorationImage(
+          image: NetworkImage(pet.images.isNotEmpty ? pet.images[0] : 'default_image_url'), // Exibe a primeira imagem, ou uma imagem default
+          fit: BoxFit.cover,
+        ),
+        borderRadius: BorderRadius.circular(26),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -33,21 +35,23 @@ class CardPet extends StatelessWidget {
                   size: 24,
                 ),
                 Text(
-                  pet.likes,
+                  pet.color, // Cor do pet
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
             Text(
-              pet.name,
+              pet.name, // Nome do pet
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold),
-            )
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
       ),

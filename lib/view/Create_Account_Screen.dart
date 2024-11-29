@@ -1,212 +1,190 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adocaopets/view/Sign_In_Screen.dart';
-import 'package:flutter_adocaopets/widgets/email_field.dart';
-import 'package:flutter_adocaopets/widgets/password_field.dart';
+import 'package:flutter_adocaopets/constants/images_assets.dart';
+import 'package:flutter_adocaopets/controllers/user_controller.dart';
+import 'package:flutter_adocaopets/view/Home.screen.dart';
+import 'package:flutter_adocaopets/view/sign_in_screen.dart';
 import 'package:flutter_adocaopets/widgets/social_media_btns.dart';
-import '../constants/images_assets.dart';
+import 'package:provider/provider.dart';
 
-class CreateaccountScreen extends StatelessWidget {
+class CreateaccountScreen extends StatefulWidget {
   const CreateaccountScreen({super.key});
+
+  @override
+  _CreateaccountScreenState createState() => _CreateaccountScreenState();
+}
+
+class _CreateaccountScreenState extends State<CreateaccountScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  late UserController _userController;
+  String _errorMessage = '';
+  final _formKey = GlobalKey<FormState>(); 
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          Logo(),
-          Text_Container(),
-          EmailField(),
-          PasswordField(),
-          SignupBtn(),
-          SocialMedia(),
-          Dont_have_account_SignUp(),
-        ],
-      ),
-    );
-  }
-}
-
-class Dont_have_account_SignUp extends StatelessWidget {
-  const Dont_have_account_SignUp({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Already have an account?",
-            style: TextStyle(fontSize: 16),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              const Logo(),
+              const Text_Container(),
+              _buildTextField(_nameController, 'Name'),
+              _buildTextField(_emailController, 'Email'),
+              _buildTextField(_phoneController, 'Phone'),
+              _buildPasswordField(_passwordController, 'Password'),
+              _buildconfirmPasswordField(_confirmPasswordController, 'Confirm password'),
+              if (_errorMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    _errorMessage,
+                    style: TextStyle(color: Colors.red, fontSize: 16),
+                  ),
+                ),
+              SignupBtn(onPressed: _signUp),
+              SocialMedia(),
+              const Dont_have_account_SignUp(),
+            ],
           ),
-          GestureDetector(
-            onTap: (){
-              Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SignInScreen(),
-                      ),
-                    );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Sign In",
-                style: TextStyle(fontSize: 16, color: Color(0xFF5250E1)),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class Text_Container extends StatelessWidget {
-  const Text_Container({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Create your\naccount",
-              style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              "Personalise your pet’s page with photos, details and memories.",
-              style: TextStyle(fontSize: 18, color: Colors.grey),
-            ),
-          ],
         ),
       ),
     );
   }
-}
 
-class AppleBtn extends StatelessWidget {
-  const AppleBtn({
-    super.key,
-  });
+  Future<void> _signUp() async {
+  if (_formKey.currentState?.validate() ?? false) {
+    setState(() {
+      _errorMessage = '';
+    });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 88,
-      height: 60, // Padding interno
-      decoration: BoxDecoration(
-        color: Colors.white, // Cor de fundo do Container
-        border: Border.all(
-          color: Colors.grey.withOpacity(0.5), // Borda levemente cinza
-          width: 1.0, // Largura da borda
-        ),
-        borderRadius:
-            BorderRadius.circular(16.0), // Borda arredondada (opcional)
-      ),
-      child: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.apple,
-            color: Colors.black,
-            size: 24,
-          )),
-    );
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final phone = _phoneController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmpassword = _confirmPasswordController.text.trim();
+
+    if (password != confirmpassword) {
+      setState(() {
+        _errorMessage = 'Passwords do not match';
+      });
+      return;
+    }
+
+    final userController = Provider.of<UserController>(context, listen: false);
+
+    try {
+      await userController.createAccount(
+        name: name,
+        email: email,
+        phone: phone,
+        password: password, 
+        confirmpassword: confirmpassword,
+      );
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const SignInScreen()),
+      );
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error: ${e.toString()}';
+      });
+    }
   }
 }
 
-class GoogleBtn extends StatelessWidget {
-  const GoogleBtn({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 88,
-      height: 60, // Padding interno
-      decoration: BoxDecoration(
-        color: Colors.white, // Cor de fundo do Container
-        border: Border.all(
-          color: Colors.grey.withOpacity(0.5), // Borda levemente cinza
-          width: 1.0, // Largura da borda
+  Widget _buildTextField(TextEditingController controller, String label) {
+    return SizedBox(
+      width: 364,
+      height: 60,
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
+          label: Text(label, style: TextStyle(color: Colors.grey[600])),
         ),
-        borderRadius:
-            BorderRadius.circular(16.0), // Borda arredondada (opcional)
-      ),
-      child: IconButton(
-        onPressed: () {
-          // Ação do botão
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter $label';
+          }
+          return null;
         },
-        icon: Image.asset('assets/icons/googleIcon.png',
-            width: 24, height: 24), // Ajuste o tamanho se necessário
       ),
     );
   }
+
+  Widget _buildPasswordField(TextEditingController controller, String label, {bool isPassword = true}) {
+  return SizedBox(
+    width: 364,
+    height: 60,
+    child: TextFormField(
+      controller: controller,
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+        ),
+        label: Text(label, style: TextStyle(color: Colors.grey[600])),
+        suffixIcon: Icon(Icons.remove_red_eye, color: Color(0xFF5250E1)),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter $label';
+        }
+        return null;
+      },
+    ),
+  );
 }
 
-class FacebookBtn extends StatelessWidget {
-  const FacebookBtn({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 88,
-      height: 60, // Padding interno
-      decoration: BoxDecoration(
-        color: Colors.white, // Cor de fundo do Container
-        border: Border.all(
-          color: Colors.grey.withOpacity(0.5), // Borda levemente cinza
-          width: 1.0, // Largura da borda
+Widget _buildconfirmPasswordField(TextEditingController controller, String label, {bool isPassword = true}) {
+  return SizedBox(
+    width: 364,
+    height: 60,
+    child: TextFormField(
+      controller: controller,
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
         ),
-        borderRadius:
-            BorderRadius.circular(16.0), // Borda arredondada (opcional)
+        label: Text(label, style: TextStyle(color: Colors.grey[600])),
+        suffixIcon: Icon(Icons.remove_red_eye, color: Color(0xFF5250E1)),
       ),
-      child: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.facebook,
-            color: Colors.blue,
-            size: 24,
-          )),
-    );
-  }
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter $label';
+        }
+        return null;
+      },
+    ),
+  );
 }
-
-class Logo extends StatelessWidget {
-  const Logo({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Container(
-        child: Image.asset(
-          appImages.Logo,
-          height: 70,
-        ),
-        alignment: Alignment.centerLeft,
-      ),
-    );
-  }
 }
 
 class SignupBtn extends StatelessWidget {
-  const SignupBtn({
-    super.key,
-  });
+  final VoidCallback onPressed;
+
+  const SignupBtn({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -217,16 +195,78 @@ class SignupBtn extends StatelessWidget {
         height: 60,
         child: ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-                Color(0xFF5250E1)), // Define a cor de fundo
+            backgroundColor: MaterialStateProperty.all(const Color(0xFF5250E1)),
           ),
-          onPressed: () {},
-          child: Text(
+          onPressed: onPressed,
+          child: const Text(
             "Sign Up",
-            style: TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class Dont_have_account_SignUp extends StatelessWidget {
+  const Dont_have_account_SignUp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Already have an account?", style: TextStyle(fontSize: 16)),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const SignInScreen()),
+              );
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Sign In",
+                style: TextStyle(fontSize: 16, color: Color(0xFF5250E1)),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Text_Container extends StatelessWidget {
+  const Text_Container({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Create your\naccount", style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold)),
+          Text("Personalise your pet’s page with photos, details and memories.", style: TextStyle(fontSize: 18, color: Colors.grey)),
+        ],
+      ),
+    );
+  }
+}
+
+class Logo extends StatelessWidget {
+  const Logo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+      child: Container(
+        alignment: Alignment.centerLeft,
+        child: Image.asset(appImages.Logo, height: 70),
       ),
     );
   }

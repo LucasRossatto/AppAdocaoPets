@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adocaopets/Mock/Pets_Fake_Db.dart';
+import 'package:flutter_adocaopets/controllers/pet_controller.dart';
+import 'package:flutter_adocaopets/http/http_client.dart';
+import 'package:flutter_adocaopets/repositories/pet_repositoriy.dart';
+import 'package:flutter_adocaopets/stores/pet_store.dart';
 import 'package:flutter_adocaopets/view/MyPets.dart';
 import 'package:flutter_adocaopets/view/Pet_Profile.dart';
 import 'package:flutter_adocaopets/view/Profile_screen.dart';
@@ -9,26 +12,112 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_adocaopets/constants/images_assets.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+   final String token;
+  const HomeScreen({super.key, required this.token});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late PetController _petController;  // Declaração do controller
+  final PetStore store = PetStore(
+    repository: PetRepository(
+      client: HttpClient(),
+    ),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+   _petController = PetController(petStore: store);  // Instancia o controller
+    _petController.fetchPets();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: Column(
         children: [
-          Profle_Container_Row(),
-          Search_input(),
-          Memorial_and_filter(),
-          Cat_Container(),
+          const Profle_Container_Row(),
+          const Search_input(),
+          const Memorial_and_filter(),
+          const Cat_Container(),
           Expanded(
+  child: AnimatedBuilder(
+    animation: Listenable.merge([store.isLoading, store.erro, store.state]),
+    builder: (context, child) {
+      if (store.isLoading.value) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      if (store.erro.value.isNotEmpty) {
+        return Center(
+          child: Text(
+            store.erro.value,
+            style: const TextStyle(
+              color: Colors.black12,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        );
+      }
+
+      if (store.state.value.isEmpty) {
+        return Center(
+          child: Text(
+            "Nenhum item na lista",
+            style: TextStyle(
+              color: Colors.black12,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        );
+      } else {
+        return Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+          child: MasonryGridView.count(
+            crossAxisCount: 2,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 20,
+            itemCount: store.state.value.length,
+            itemBuilder: (context, index) {
+              final item = store.state.value[index];
+
+              final petImage = item.images.isNotEmpty ? item.images[0] : 'assets/default_image.png'; // Imagem padrão
+
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Pet_profile(
+                        pet: item, 
+                      ),
+                    ),
+                  );
+                },
+                child: CardPet(pet: item)
+              );
+            },
+          ),
+        );
+      }
+    },
+  ),
+)
+
+
+          /*Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 20,right: 20,top: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
               child: MasonryGridView.count(
                 crossAxisCount: 2,
                 mainAxisSpacing: 20,
@@ -37,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                       Navigator.of(context).push(
+                      Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => Pet_profile(
                             pet: appPets[index],
@@ -52,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-          ),
+          ),*/
         ],
       ),
       bottomNavigationBar: BottomAppBarHome(),
@@ -74,37 +163,34 @@ class BottomAppBarHome extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-              onPressed: () {
-              },
-              icon:
-                  Image.asset('assets/icons/Home.png', width: 24, height: 24),
+              onPressed: () {},
+              icon: Image.asset('assets/icons/Home.png', width: 24, height: 24),
             ),
             IconButton(
               onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>  Mypets(),
-                      ),
-                    );
-                  },
-              icon:
-                  Image.asset('assets/icons/Paw.png', width: 24, height: 24),
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Mypets(),
+                  ),
+                );
+              },
+              icon: Image.asset('assets/icons/Paw.png', width: 24, height: 24),
             ),
             IconButton(
-              onPressed: () {
-              },
+              onPressed: () {},
               icon: Image.asset('assets/icons/Message.png',
                   width: 24, height: 24),
             ),
             IconButton(
-              onPressed: () { Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => Profile_Screen(),
-                    ),
-                  );
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Profile_Screen(),
+                  ),
+                );
               },
-              icon: Image.asset('assets/icons/Person.png',
-                  width: 24, height: 24),
+              icon:
+                  Image.asset('assets/icons/Person.png', width: 24, height: 24),
             ),
           ],
         ),
@@ -243,8 +329,6 @@ class Memorial_and_filter extends StatelessWidget {
   }
 }
 
-
-
 class Profle_Container_Row extends StatelessWidget {
   const Profle_Container_Row({
     super.key,
@@ -253,7 +337,7 @@ class Profle_Container_Row extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 10,left: 10),
+      padding: const EdgeInsets.only(right: 10, left: 10),
       child: Container(
         width: 380,
         child: Row(
@@ -265,12 +349,12 @@ class Profle_Container_Row extends StatelessWidget {
                   padding: const EdgeInsets.all(10.0),
                   child: ClipOval(
                     child: Container(
-                      width: 48.0, 
-                      height: 48.0, 
+                      width: 48.0,
+                      height: 48.0,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(appImages.DogProfile), 
-                          fit: BoxFit.cover, 
+                          image: AssetImage(appImages.DogProfile),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
@@ -320,7 +404,7 @@ class Cat_Container extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20,right: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20),
       child: Container(
         width: 380,
         height: 220,
