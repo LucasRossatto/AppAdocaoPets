@@ -13,10 +13,12 @@ class Pet_profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Seleciona a primeira imagem da lista de imagens do pet ou uma imagem padrão
-    final petImage = pet.images.isNotEmpty ? pet.images[0] : 'assets/default_image.png';
-    
+    final petImage =
+        pet.images.isNotEmpty ? pet.images[0] : 'assets/default_image.png';
+
     // Validação da imagem para o fundo
-    final petBackdroop = pet.images.length > 1 ? pet.images[1] : 'assets/default_image.png';
+    final petBackdroop =
+        pet.images.length > 1 ? pet.images[1] : 'assets/default_image.png';
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -44,7 +46,10 @@ class Pet_profile extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => HomeScreen(token: '',),
+                            builder: (context) => HomeScreen(
+                              token: '',
+                              userId: '',
+                            ),
                           ),
                         );
                       },

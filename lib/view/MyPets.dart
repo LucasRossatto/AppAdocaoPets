@@ -133,7 +133,7 @@ class BottomApp extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(token: '',),
+                    builder: (context) => HomeScreen(token: '', userId: '',),
                   ),
                 );
               },
@@ -162,7 +162,7 @@ class BottomApp extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => Profile_Screen(),
+                    builder: (context) => Profile_Screen(token: '', userId: '',),
                   ),
                 );
               },

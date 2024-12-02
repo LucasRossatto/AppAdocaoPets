@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_adocaopets/controllers/auth_controller.dart';
 import 'package:flutter_adocaopets/controllers/pet_controller.dart';
 import 'package:flutter_adocaopets/http/http_client.dart';
 import 'package:flutter_adocaopets/repositories/pet_repositoriy.dart';
@@ -10,10 +11,14 @@ import 'package:flutter_adocaopets/widgets/card_pet.dart';
 import 'package:flutter_adocaopets/widgets/search.input.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_adocaopets/constants/images_assets.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-   final String token;
-  const HomeScreen({super.key, required this.token});
+  final String token;
+  final String userId; // Novo parâmetro
+
+  const HomeScreen({required this.token, required this.userId, Key? key})
+      : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -21,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late PetController _petController;  // Declaração do controller
+  late PetController _petController; // Declaração do controller
   final PetStore store = PetStore(
     repository: PetRepository(
       client: HttpClient(),
@@ -31,8 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-   _petController = PetController(petStore: store);  // Instancia o controller
+    _petController = PetController(petStore: store); // Instancia o controller
     _petController.fetchPets();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AuthController>(context, listen: false)
+          .fetchUserDetails(widget.userId);
+    });
   }
 
   @override
@@ -46,74 +55,75 @@ class _HomeScreenState extends State<HomeScreen> {
           const Memorial_and_filter(),
           const Cat_Container(),
           Expanded(
-  child: AnimatedBuilder(
-    animation: Listenable.merge([store.isLoading, store.erro, store.state]),
-    builder: (context, child) {
-      if (store.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
+            child: AnimatedBuilder(
+              animation:
+                  Listenable.merge([store.isLoading, store.erro, store.state]),
+              builder: (context, child) {
+                if (store.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-      if (store.erro.value.isNotEmpty) {
-        return Center(
-          child: Text(
-            store.erro.value,
-            style: const TextStyle(
-              color: Colors.black12,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        );
-      }
-
-      if (store.state.value.isEmpty) {
-        return Center(
-          child: Text(
-            "Nenhum item na lista",
-            style: TextStyle(
-              color: Colors.black12,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        );
-      } else {
-        return Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-          child: MasonryGridView.count(
-            crossAxisCount: 2,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 20,
-            itemCount: store.state.value.length,
-            itemBuilder: (context, index) {
-              final item = store.state.value[index];
-
-              final petImage = item.images.isNotEmpty ? item.images[0] : 'assets/default_image.png'; // Imagem padrão
-
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => Pet_profile(
-                        pet: item, 
+                if (store.erro.value.isNotEmpty) {
+                  return Center(
+                    child: Text(
+                      store.erro.value,
+                      style: const TextStyle(
+                        color: Colors.black12,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   );
-                },
-                child: CardPet(pet: item)
-              );
-            },
-          ),
-        );
-      }
-    },
-  ),
-)
+                }
 
+                if (store.state.value.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "Nenhum item na lista",
+                      style: TextStyle(
+                        color: Colors.black12,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                } else {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    child: MasonryGridView.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 20,
+                      itemCount: store.state.value.length,
+                      itemBuilder: (context, index) {
+                        final item = store.state.value[index];
+                        final petImage = item.images.isNotEmpty
+                            ? item.images[0]
+                            : 'assets/default_image.png'; // Imagem padrão
+
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Pet_profile(
+                                    pet: item,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: CardPet(pet: item));
+                      },
+                    ),
+                  );
+                }
+              },
+            ),
+          )
 
           /*Expanded(
             child: Padding(
@@ -144,15 +154,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ),*/
         ],
       ),
-      bottomNavigationBar: BottomAppBarHome(),
+      bottomNavigationBar: BottomAppBarHome(
+        token: widget.token,
+        userId: widget.userId,
+      ),
     );
   }
 }
 
 class BottomAppBarHome extends StatelessWidget {
+  final String token;
+  final String userId;
+
   const BottomAppBarHome({
-    super.key,
-  });
+    Key? key,
+    required this.token,
+    required this.userId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -183,9 +201,10 @@ class BottomAppBarHome extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                Navigator.of(context).push(
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => Profile_Screen(),
+                    builder: (context) =>
+                        Profile_Screen(token: token, userId: userId),
                   ),
                 );
               },
@@ -316,7 +335,7 @@ class Memorial_and_filter extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Memorial",
+            "Feed",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           IconButton(
@@ -330,12 +349,16 @@ class Memorial_and_filter extends StatelessWidget {
 }
 
 class Profle_Container_Row extends StatelessWidget {
-  const Profle_Container_Row({
-    super.key,
-  });
+  const Profle_Container_Row({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final authController = Provider.of<AuthController>(context);
+
+    // Acessando o nome corretamente
+    final userName =
+        authController.userDetails?['user']?['name'] ?? 'Nome indefinido';
+
     return Padding(
       padding: const EdgeInsets.only(right: 10, left: 10),
       child: Container(
@@ -363,29 +386,30 @@ class Profle_Container_Row extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                        child: Row(
+                    Row(
                       children: [
-                        Text(
-                          "Hello,",
+                        const Text(
+                          "Olá,",
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
-                          " Lucas!",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        )
+                          " $userName!",
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
-                    )),
-                    Text(
-                      "Share your pets",
+                    ),
+                    const Text(
+                      "adote seus pets",
                       style: TextStyle(fontSize: 14, color: Colors.grey),
-                    )
+                    ),
                   ],
                 ),
               ],
             ),
-            Icon(
+            const Icon(
               Icons.notifications_rounded,
               size: 24,
             )

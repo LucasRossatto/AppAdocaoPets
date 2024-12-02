@@ -31,8 +31,8 @@ class _SignInScreenState extends State<SignInScreen> {
           key: _formKey,
           child: Column(
             children: [
-              Logo(),
-              TextContainer(),
+              const Logo(),
+              const TextContainer(),
               // Campos de entrada para o email e senha
               _buildEmailField(),
               _buildPasswordField(),
@@ -89,10 +89,15 @@ class _SignInScreenState extends State<SignInScreen> {
       child: TextFormField(
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           labelText: "Email",
           hintText: "Enter your email",
-          border: OutlineInputBorder(),
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -114,10 +119,15 @@ class _SignInScreenState extends State<SignInScreen> {
       child: TextFormField(
         controller: _passwordController,
         obscureText: true, // Oculta o texto da senha
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           labelText: "Password",
           hintText: "Enter your password",
-          border: OutlineInputBorder(),
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -129,52 +139,66 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-Future<void> _handleSignIn(AuthController controller, BuildContext context) async {
-  if (_formKey.currentState?.validate() ?? false) {
-    final email = _emailController.text;
-    final password = _passwordController.text;
+  Future<void> _handleSignIn(
+      AuthController controller, BuildContext context) async {
+    if (_formKey.currentState?.validate() ?? false) {
+      final email = _emailController.text;
+      final password = _passwordController.text;
 
-    try {
-      // Exibir indicador de carregamento
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Autenticando, por favor aguarde...")),
-      );
-
-      // Tentar autenticar
-      final token = await controller.signIn(email, password);
-
-      print("Tentando login com: $email");
-      print("Token retornado: $token");
-      print("Erro do controlador: ${controller.errorMessage}");
-
-      if (token != null) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', token); // Certifique-se de que o token está sendo salvo
-
+      try {
+        // Exibir indicador de carregamento
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Login bem-sucedido!")),
+          const SnackBar(content: Text("Autenticando, por favor aguarde...")),
         );
 
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeScreen(token: token)),
-        );
-      } else {
+        // Tentar autenticar
+        final credentials = await controller.signIn(
+            email, password); // Agora retorna um Map<String, String>
+
+        print("Tentando login com: $email");
+        print("Credenciais retornadas: $credentials");
+        print("Erro do controlador: ${controller.errorMessage}");
+
+        if (credentials != null) {
+          final token = credentials['token'];
+          final userId = credentials['userId'];
+
+          if (token != null && userId != null) {
+            // Salvar token e userId no SharedPreferences
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('token', token);
+            await prefs.setString('userId', userId);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Login bem-sucedido!")),
+            );
+
+            // Navegar para a HomeScreen passando token e userId
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(token: token, userId: userId),
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Credenciais inválidas!")),
+            );
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(controller.errorMessage.isNotEmpty
+                    ? controller.errorMessage
+                    : "Falha ao realizar login!")),
+          );
+        }
+      } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(controller.errorMessage.isNotEmpty
-              ? controller.errorMessage
-              : "Falha ao realizar login!")),
+          SnackBar(content: Text("Erro ao autenticar: $e")),
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erro ao autenticar: $e")),
-      );
     }
   }
-}
-
-
-
 
 // Exibe o diálogo de erro
   void _showErrorDialog(BuildContext context, String message) {
