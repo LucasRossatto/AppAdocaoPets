@@ -7,7 +7,7 @@ class Search_input extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10,bottom: 10,left: 20,right: 20),
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
       child: SizedBox(
         width: 364,
         height: 60,
@@ -16,17 +16,30 @@ class Search_input extends StatelessWidget {
               filled: true, // Habilita a cor de fundo
               fillColor: Colors.white,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16.0), // Raio da borda
-                borderSide: BorderSide(
-                  color: Color.fromARGB(255, 138, 138, 138), // Cor da borda
-                  width: 4.0, // Largura da borda
-                ),
+                borderRadius: BorderRadius.circular(16.0),
+                borderSide:
+                    const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16.0),
+                borderSide:
+                    const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16.0),
+                borderSide:
+                    const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16.0),
+                borderSide:
+                    const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
               ),
               label: Text(
-                'Search for pets, name, location...',
+                'Procure por pets e usuários...',
                 style: TextStyle(
-                  color: Colors.grey[600],
-                ),
+                  color: Color.fromARGB(150, 48, 55, 66),
+                  fontWeight: FontWeight.bold)
               ),
               suffixIcon: Image.asset(
                 appImages.SearchIcon,

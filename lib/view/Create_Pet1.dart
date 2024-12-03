@@ -12,6 +12,14 @@ class Create_pet1 extends StatefulWidget {
 }
 
 class _Create_pet1State extends State<Create_pet1> {
+  int? selectedIndex;
+
+  void onCardTap(int index) {
+    setState(() {
+      selectedIndex = selectedIndex == index ? null : index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +30,7 @@ class _Create_pet1State extends State<Create_pet1> {
           Padding(
             padding: const EdgeInsets.only(left: 23),
             child: Text(
-              "Select animal",
+              "Selecione o tipo de animal",
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
           ),
@@ -37,12 +45,23 @@ class _Create_pet1State extends State<Create_pet1> {
                 itemBuilder: (context, index) {
                   return CardCategoriePet(
                     categorie: appPetCategorie[index],
+                    isSelected: selectedIndex == index,
+                    onTap: () => onCardTap(index),
                   );
                 },
               ),
             ),
           ),
-          Next_btn()
+          Next_btn(
+            isButtonEnabled: selectedIndex != null,
+            onNext: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => Create_pet2(),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
@@ -50,38 +69,38 @@ class _Create_pet1State extends State<Create_pet1> {
 }
 
 class Next_btn extends StatelessWidget {
+  final bool isButtonEnabled;
+  final VoidCallback onNext;
+
   const Next_btn({
     super.key,
+    required this.isButtonEnabled,
+    required this.onNext,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 28),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Create_pet2(),
-                ),
-              );
-            },
+            onPressed: isButtonEnabled ? onNext : null,
             style: ElevatedButton.styleFrom(
               minimumSize: Size(145, 56),
-              backgroundColor: Color(0xFF5250E1),
+              backgroundColor:
+                  isButtonEnabled ? Color(0xFF5250E1) : Colors.grey.shade400,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
             child: Text(
-              'Next',
+              'Próximo',
               style: TextStyle(
-                fontSize: 16, // Tamanho da fonte
-                fontWeight: FontWeight.bold, // Negrito
-                color: Colors.white, // Cor do texto
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
           )
@@ -90,4 +109,3 @@ class Next_btn extends StatelessWidget {
     );
   }
 }
-

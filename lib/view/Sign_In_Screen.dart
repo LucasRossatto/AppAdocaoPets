@@ -26,7 +26,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.only(left: 20, right: 20),
         child: Form(
           key: _formKey,
           child: Column(
@@ -35,7 +35,10 @@ class _SignInScreenState extends State<SignInScreen> {
               const TextContainer(),
               // Campos de entrada para o email e senha
               _buildEmailField(),
+              Padding(padding: const EdgeInsets.all(6)),
               _buildPasswordField(),
+              Padding(padding: const EdgeInsets.all(6)),
+
               SignInButton(
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
@@ -52,7 +55,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Already have an account?",
+                      "Ainda não possui uma conta?",
                       style: TextStyle(fontSize: 16),
                     ),
                     GestureDetector(
@@ -66,9 +69,11 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          "Sign Up",
-                          style:
-                              TextStyle(fontSize: 16, color: Color(0xFF5250E1)),
+                          "Criar a sua",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF5250E1),
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -84,58 +89,82 @@ class _SignInScreenState extends State<SignInScreen> {
 
   // Campo de entrada para o email
   Widget _buildEmailField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: TextFormField(
-        controller: _emailController,
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          labelText: "Email",
-          hintText: "Enter your email",
-          filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0),
-            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
-          ),
+    return TextFormField(
+      controller: _emailController,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        labelText: "Email",
+        hintText: "Digite seu email",
+        labelStyle: TextStyle(
+            color: Color.fromARGB(150, 48, 55, 66),
+            fontWeight: FontWeight.bold),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter your email';
-          }
-          if (!RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-              .hasMatch(value)) {
-            return 'Please enter a valid email';
-          }
-          return null;
-        },
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+        ),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your email';
+        }
+        if (!RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+            .hasMatch(value)) {
+          return 'Please enter a valid email';
+        }
+        return null;
+      },
     );
   }
 
   Widget _buildPasswordField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: TextFormField(
-        controller: _passwordController,
-        obscureText: true, // Oculta o texto da senha
-        decoration: InputDecoration(
-          labelText: "Password",
-          hintText: "Enter your password",
-          filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0),
-            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
-          ),
+    return TextFormField(
+      controller: _passwordController,
+      obscureText: true, // Oculta o texto da senha
+      decoration: InputDecoration(
+        labelText: "Senha",
+        hintText: "Digite sua senha",
+        labelStyle: TextStyle(
+            color: Color.fromARGB(150, 48, 55, 66),
+            fontWeight: FontWeight.bold),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter your password';
-          }
-          return null;
-        },
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+        ),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your password';
+        }
+        return null;
+      },
     );
   }
 
@@ -245,7 +274,7 @@ class SignInButton extends StatelessWidget {
           child: isLoading
               ? const CircularProgressIndicator(color: Colors.white)
               : const Text(
-                  "Sign In",
+                  "Entrar",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -265,17 +294,20 @@ class TextContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
       child: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Sign In",
-              style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+              "Digite o seu\nemail e senha",
+              style: TextStyle(
+                fontSize: 34,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const Text(
-              "Personalize your pet’s page with photos, details and memories.",
+              "Explore perfis com fotos adoráveis e Pets prontos para ganharem um lar.",
               style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
           ],

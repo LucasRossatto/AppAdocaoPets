@@ -11,7 +11,10 @@ import 'package:flutter_adocaopets/widgets/search.input.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class Mypets extends StatefulWidget {
-  Mypets({super.key});
+  final String token;
+  final String userId;
+  Mypets({required this.token, required this.userId, Key? key})
+      : super(key: key);
 
   @override
   State<Mypets> createState() => _MypetsState();
@@ -133,7 +136,10 @@ class BottomApp extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(token: '', userId: '',),
+                    builder: (context) => HomeScreen(
+                      token: '',
+                      userId: '',
+                    ),
                   ),
                 );
               },
@@ -162,7 +168,10 @@ class BottomApp extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => Profile_Screen(token: '', userId: '',),
+                    builder: (context) => Profile_Screen(
+                      token: '',
+                      userId: '',
+                    ),
                   ),
                 );
               },

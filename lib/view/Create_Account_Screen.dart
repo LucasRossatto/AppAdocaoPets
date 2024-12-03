@@ -43,7 +43,8 @@ class _CreateaccountScreenState extends State<CreateaccountScreen> {
                     Padding(padding: const EdgeInsets.all(6)),
                     _buildTextField(_phoneController, 'Digite seu Phone'),
                     Padding(padding: const EdgeInsets.all(6)),
-                    _buildPasswordField(_passwordController, 'Digite sua senha'),
+                    _buildPasswordField(
+                        _passwordController, 'Digite sua senha'),
                     Padding(padding: const EdgeInsets.all(6)),
                     _buildconfirmPasswordField(
                         _confirmPasswordController, 'Confirme sua senha'),
@@ -123,7 +124,22 @@ class _CreateaccountScreenState extends State<CreateaccountScreen> {
             borderRadius: BorderRadius.circular(16.0),
             borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
           ),
-          label: Text(label, style: TextStyle(color: Colors.grey[600])),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
+          label: Text(label,
+              style: TextStyle(
+                  color: Color.fromARGB(150, 48, 55, 66),
+                  fontWeight: FontWeight.bold)),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -150,8 +166,22 @@ class _CreateaccountScreenState extends State<CreateaccountScreen> {
             borderRadius: BorderRadius.circular(16.0),
             borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
           ),
-          label: Text(label, style: TextStyle(color: Colors.grey[600])),
-          suffixIcon: Icon(Icons.remove_red_eye, color: Color(0xFF5250E1)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
+          label: Text(label,
+              style: TextStyle(
+                  color: Color.fromARGB(150, 48, 55, 66),
+                  fontWeight: FontWeight.bold)),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -179,8 +209,22 @@ class _CreateaccountScreenState extends State<CreateaccountScreen> {
             borderRadius: BorderRadius.circular(16.0),
             borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
           ),
-          label: Text(label, style: TextStyle(color: Colors.grey[600])),
-          suffixIcon: Icon(Icons.remove_red_eye, color: Color(0xFF5250E1)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
+          ),
+          label: Text(label,
+              style: TextStyle(
+                  color: Color.fromARGB(150, 48, 55, 66),
+                  fontWeight: FontWeight.bold)),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -211,7 +255,7 @@ class SignupBtn extends StatelessWidget {
           ),
           onPressed: onPressed,
           child: const Text(
-            "Sign Up",
+            "Cadastrar",
             style: TextStyle(
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           ),
@@ -231,7 +275,7 @@ class Dont_have_account_SignUp extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text("Already have an account?",
+          const Text("Já tem uma conta?",
               style: TextStyle(fontSize: 16)),
           GestureDetector(
             onTap: () {
@@ -242,8 +286,8 @@ class Dont_have_account_SignUp extends StatelessWidget {
             child: const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                "Sign In",
-                style: TextStyle(fontSize: 16, color: Color(0xFF5250E1)),
+                "Entrar",
+                style: TextStyle(fontSize: 16, color: Color(0xFF5250E1),fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -265,7 +309,7 @@ class Text_Container extends StatelessWidget {
         children: [
           Text("Crie sua conta",
               style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold)),
-          Text("Encontre seu melhor amigo de quatro patas",
+          Text("Encontre seu melhor amigo para a vida toda.",
               style: TextStyle(fontSize: 18, color: Colors.grey)),
         ],
       ),

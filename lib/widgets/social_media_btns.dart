@@ -20,7 +20,7 @@ class SocialMedia extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Text(
-              "or continue with",
+              "ou continue com",
               style: TextStyle(fontSize: 16, color: Colors.grey[800]),
             ),
           ),

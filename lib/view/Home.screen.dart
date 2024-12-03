@@ -188,7 +188,7 @@ class BottomAppBarHome extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => Mypets(),
+                    builder: (context) => Mypets(token: token, userId: userId),
                   ),
                 );
               },

@@ -1,6 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_adocaopets/view/Home.screen.dart';
+import 'package:flutter_adocaopets/view/MyPets.dart';
 import 'package:flutter_adocaopets/view/Sign_In_Screen.dart';
 import 'package:flutter_adocaopets/widgets/Swtich_Btn.dart';
 import 'package:provider/provider.dart';
@@ -54,8 +56,13 @@ class Profile_Screen extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/home');
-                },
+                  Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        HomeScreen(token: token, userId: userId),
+                  ),
+                );
+              },
                 icon: Image.asset(
                   'assets/icons/Home.png',
                   width: 24,
@@ -65,8 +72,13 @@ class Profile_Screen extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/mypets');
-                },
+                  Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Mypets(token: token, userId: userId),
+                  ),
+                );
+              },
                 icon: Image.asset(
                   'assets/icons/Paw.png',
                   width: 24,
