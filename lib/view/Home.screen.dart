@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/controllers/auth_controller.dart';
-import 'package:flutter_adocaopets/controllers/pet_controller.dart';
+import 'package:flutter_adocaopets/controllers/feed_pet_controller.dart';
 import 'package:flutter_adocaopets/http/http_client.dart';
 import 'package:flutter_adocaopets/repositories/pet_repositoriy.dart';
 import 'package:flutter_adocaopets/stores/pet_store.dart';
@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   final String token;
-  final String userId; // Novo parâmetro
+  final String userId;
 
   const HomeScreen({required this.token, required this.userId, Key? key})
       : super(key: key);

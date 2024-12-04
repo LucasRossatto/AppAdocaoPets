@@ -11,10 +11,10 @@ class AuthController extends ChangeNotifier {
       'https://pet-adopt-dq32j.ondigitalocean.app/user/login';
 
   String? _token;
-  String? _userId; // Novo campo para armazenar o userId
+  String? _userId; 
   String? get token => _token;
   String? get userId => _userId;
-    Map<String, dynamic>? userDetails; // Para armazenar os detalhes do usuário
+    Map<String, dynamic>? userDetails; 
 
 
   // Função de login que retorna token e userId
@@ -44,7 +44,7 @@ class AuthController extends ChangeNotifier {
           await _storeCredentials(_token!, _userId!);
 
           print("Token recebido: $_token, UserId recebido: $_userId");
-          return {'token': _token!, 'userId': _userId!}; // Retorna token e userId
+          return {'token': _token!, 'userId': _userId!}; 
         } else {
           errorMessage = data['message'] ?? 'Erro desconhecido';
           print("Mensagem de erro: $errorMessage");
@@ -69,8 +69,8 @@ class AuthController extends ChangeNotifier {
   Future<void> _storeCredentials(String token, String userId) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token); // Salva o token
-      await prefs.setString('userId', userId); // Salva o userId
+      await prefs.setString('token', token); 
+      await prefs.setString('userId', userId);
       notifyListeners();
     } catch (e) {
       errorMessage = 'Failed to store credentials: $e';

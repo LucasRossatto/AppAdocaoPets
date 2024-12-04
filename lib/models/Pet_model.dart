@@ -13,12 +13,21 @@ class PetModel {
     required this.images,
   });
 
-  factory PetModel.fromMap(Map<String, dynamic> map) {
+  factory PetModel.fromJson(Map<String, dynamic> map) {
     return PetModel(
         name: map['name'],
         age: (map['age'] as int) + 1,
         weight: (map['weight'] as int) + 1,
         color: map['color'],
         images: List<String>.from((map['images'] as List)));
+  }
+Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'age': age,
+      'weight': weight,
+      'color': color,
+      'images': images,
+    };
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/controllers/auth_controller.dart';
 import 'package:flutter_adocaopets/controllers/user_controller.dart';
+import 'package:flutter_adocaopets/view/Create_Pet2.dart';
 import 'package:flutter_adocaopets/view/MyPets.dart';
 import 'package:flutter_adocaopets/view/Sign_In_Screen.dart';
-import 'package:provider/provider.dart'; // Importe o provider
-import 'package:flutter_adocaopets/view/Create_Account_Screen.dart'; // Importe a tela de criação de conta
+import 'package:provider/provider.dart'; 
 
 void main() {
   runApp(const MyApp());

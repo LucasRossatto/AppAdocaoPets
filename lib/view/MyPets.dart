@@ -39,7 +39,10 @@ class _MypetsState extends State<Mypets> {
       appBar: AppBar(),
       body: Column(
         children: [
-          Title_and_CreatePetBtn_container(),
+          Title_and_CreatePetBtn_container(
+            token: widget.token,
+            userId: widget.userId,
+          ),
           Search_input(),
           Expanded(
             child: AnimatedBuilder(
@@ -114,14 +117,22 @@ class _MypetsState extends State<Mypets> {
           )
         ],
       ),
-      bottomNavigationBar: BottomApp(),
+      bottomNavigationBar: BottomApp(
+        token: widget.token,
+        userId: widget.userId,
+      ),
     );
   }
 }
 
 class BottomApp extends StatelessWidget {
+  final String token;
+  final String userId;
+
   const BottomApp({
     super.key,
+    required this.token,
+    required this.userId,
   });
 
   @override
@@ -134,12 +145,10 @@ class BottomApp extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {
-                Navigator.of(context).push(
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(
-                      token: '',
-                      userId: '',
-                    ),
+                    builder: (context) =>
+                        HomeScreen(token: token, userId: userId),
                   ),
                 );
               },
@@ -169,8 +178,8 @@ class BottomApp extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => Profile_Screen(
-                      token: '',
-                      userId: '',
+                      token: token,
+                      userId: userId,
                     ),
                   ),
                 );
@@ -188,17 +197,21 @@ class BottomApp extends StatelessWidget {
 class Title_and_CreatePetBtn_container extends StatelessWidget {
   const Title_and_CreatePetBtn_container({
     super.key,
+    required this.token,
+    required this.userId,
   });
 
+  final String token;
+  final String userId;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 20),
+      padding: const EdgeInsets.only(top: 10, bottom: 20, right: 24, left: 24),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "My pet’s memorial",
+            "Meus pets",
             style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
           ),
           Container(
@@ -212,7 +225,8 @@ class Title_and_CreatePetBtn_container extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => Create_pet1(),
+                        builder: (context) =>
+                            Create_pet1(token: token, userId: userId),
                       ),
                     );
                   },

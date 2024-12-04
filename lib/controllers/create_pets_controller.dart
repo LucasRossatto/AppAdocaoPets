@@ -1,21 +1,22 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_adocaopets/models/Pet_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_adocaopets/models/User_model.dart';
 
-class UserController with ChangeNotifier {
-  final String apiUrlRegister =
-      'https://pet-adopt-dq32j.ondigitalocean.app/user/register';
+class CreatePetController extends ChangeNotifier { 
+
+    final String apiUrlRegister =
+      'https://pet-adopt-dq32j.ondigitalocean.app/pet/create';
 
   bool _isLoading = false;
   bool _isLoggedIn = false;
   String _errorMessage = '';
-  UserModel? _user;
+  PetModel? _pet;
 
   bool get isLoading => _isLoading;
   bool get isLoggedIn => _isLoggedIn;
   String get errorMessage => _errorMessage;
-  UserModel? get user => _user;
+  PetModel? get pet => _pet;
 
   // Atualiza o estado do carregamento
   void _setLoading(bool value) {
@@ -24,8 +25,8 @@ class UserController with ChangeNotifier {
   }
 
   // Atualiza o usuário e estado de login
-  void _setUser(UserModel? user) {
-    _user = user;
+  void _setPet(PetModel? user) {
+    _pet = pet;
     _isLoggedIn = user != null;
     _errorMessage = ''; // Limpa mensagens de erro
     notifyListeners();
@@ -34,22 +35,21 @@ class UserController with ChangeNotifier {
   // Atualiza a mensagem de erro
   void _setError(String error) {
     _errorMessage = error;
-    _setUser(null); // Remove o usuário atual em caso de erro
+    _setPet(null); // Remove o usuário atual em caso de erro
     notifyListeners();
   }
 
-  // Função para criar uma conta
-  Future<void> createAccount({
+   Future<void> createPet({
+    required String userId,
     required String name,
-    required String email,
-    required String phone,
-    required String password,
-    required String confirmpassword,
+    required String color,
+    required String age,
+    required String weight,
+    required List<String> images,
+
+ 
   }) async {
-    if (password != confirmpassword) {
-      _setError('As senhas não coincidem.');
-      return;
-    }
+    
 
     _setLoading(true);
     try {
@@ -57,21 +57,22 @@ class UserController with ChangeNotifier {
         Uri.parse(apiUrlRegister),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
+          'userId': userId,
           'name': name,
-          'email': email,
-          'phone': phone,
-          'password': password,
-          'confirmpassword': confirmpassword,
+          'color': color,
+          'weight': weight,
+          'age': age,
+          'images': images,
         }),
       );
 
       if (response.statusCode == 200) {
-        final userJson = jsonDecode(response.body);
-        final user = UserModel.fromJson(userJson);
-        _setUser(user);
+        final petJson = jsonDecode(response.body);
+        final pet = PetModel.fromJson(petJson);
+        _setPet(pet);
       } else {
         final errorJson = jsonDecode(response.body);
-        _setError(errorJson['message'] ?? 'Erro ao criar conta.');
+        _setError(errorJson['message'] ?? 'Erro ao criar Pet.');
       }
     } catch (e) {
       _setError('Erro de conexão: $e');

@@ -5,7 +5,10 @@ import 'package:flutter_adocaopets/widgets/card_categorie_pet.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class Create_pet1 extends StatefulWidget {
-  const Create_pet1({super.key});
+  final String token;
+  final String userId;
+  const Create_pet1({required this.token, required this.userId, Key? key})
+      : super(key: key);
 
   @override
   State<Create_pet1> createState() => _Create_pet1State();
@@ -27,8 +30,8 @@ class _Create_pet1State extends State<Create_pet1> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 23),
+          const Padding(
+            padding: EdgeInsets.only(left: 23),
             child: Text(
               "Selecione o tipo de animal",
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
@@ -55,11 +58,17 @@ class _Create_pet1State extends State<Create_pet1> {
           Next_btn(
             isButtonEnabled: selectedIndex != null,
             onNext: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Create_pet2(),
-                ),
-              );
+              if (selectedIndex != null) {
+                final selectedCategorie =
+                    appPetCategorie[selectedIndex!].nomeCategorie; 
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Create_pet2(
+                      nomeCategorie: selectedCategorie, token: widget.token, userId: widget.userId,
+                    ),
+                  ),
+                );
+              }
             },
           ),
         ],
@@ -88,14 +97,14 @@ class Next_btn extends StatelessWidget {
           ElevatedButton(
             onPressed: isButtonEnabled ? onNext : null,
             style: ElevatedButton.styleFrom(
-              minimumSize: Size(145, 56),
+              minimumSize: const Size(145, 56),
               backgroundColor:
-                  isButtonEnabled ? Color(0xFF5250E1) : Colors.grey.shade400,
+                  isButtonEnabled ? const Color(0xFF5250E1) : Colors.grey.shade400,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
-            child: Text(
+            child: const Text(
               'Próximo',
               style: TextStyle(
                 fontSize: 16,

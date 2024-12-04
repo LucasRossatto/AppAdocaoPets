@@ -6,7 +6,7 @@ List<PetCategorieModel> appPetCategorie = [
   PetCategorieModel(Icon: appCategories.Cat, nomeCategorie: 'Gato'),
   PetCategorieModel(Icon: appCategories.Rabbit, nomeCategorie: 'Coelho'),
   PetCategorieModel(Icon: appCategories.Rodent, nomeCategorie: 'Roedor'),
-  PetCategorieModel(Icon: appCategories.Bird, nomeCategorie: 'Aves'),
+  PetCategorieModel(Icon: appCategories.Bird, nomeCategorie: 'Ave'),
   PetCategorieModel(Icon: appCategories.Duck, nomeCategorie: 'Pato'),
   PetCategorieModel(Icon: appCategories.Horse, nomeCategorie: 'Cavalo'),
   PetCategorieModel(Icon: appCategories.Fishes, nomeCategorie: 'Peixe'),

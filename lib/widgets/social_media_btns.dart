@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adocaopets/view/Create_Account_Screen.dart';
 
 class SocialMedia extends StatelessWidget {
    SocialMedia({super.key});
@@ -50,7 +49,7 @@ class SocialMedia extends StatelessWidget {
           ),
         ],
       ),
-    );;
+    );
   }
 }
 

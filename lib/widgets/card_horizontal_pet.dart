@@ -45,7 +45,15 @@ class CardHorizontalPet extends StatelessWidget {
                         size: 24,
                       ),
                       Text(
-                        pet.color,
+                        pet.age.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        " anos",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,

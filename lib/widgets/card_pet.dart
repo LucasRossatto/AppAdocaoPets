@@ -35,7 +35,15 @@ class CardPet extends StatelessWidget {
                   size: 24,
                 ),
                 Text(
-                  pet.color, // Cor do pet
+                  pet.age.toString(), // Cor do pet
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  " anos", // Cor do pet
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,

@@ -24,7 +24,7 @@ class PetRepository implements IPetRepository {
       final body = jsonDecode(response.body);
 
       body['pets'].forEach((item) {
-        final PetModel pet = PetModel.fromMap(item);
+        final PetModel pet = PetModel.fromJson(item);
         pets.add(pet);
       });
 
