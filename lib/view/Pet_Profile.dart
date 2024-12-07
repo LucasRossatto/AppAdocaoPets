@@ -5,10 +5,13 @@ import 'package:flutter_adocaopets/view/Home.screen.dart';
 
 class Pet_profile extends StatelessWidget {
   final PetModel pet;
-  const Pet_profile({
-    super.key,
-    required this.pet,
-  });
+  final String token;
+  final String userId;
+  const Pet_profile(
+      {super.key,
+      required this.pet,
+      required this.token,
+      required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +50,8 @@ class Pet_profile extends StatelessWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => HomeScreen(
-                              token: '',
-                              userId: '',
+                              token: token,
+                              userId: userId,
                             ),
                           ),
                         );
@@ -115,35 +118,74 @@ class Pet_profile extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Action buttons
-            Btns(),
-
+            //Btns(),
             // Pet information box
+            //descriptionContainer(pet: pet),
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 20, right: 20, top: 10, bottom: 10),
+              padding: const EdgeInsets.all(20.0),
               child: Container(
-                width: 380,
-                height: 203,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Color(0xFF5BCF95),
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                      pet.name,
-                    ),
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(26)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20,right: 20,bottom: 20,top: 14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          "Caracteristicas",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 26),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Idade:",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.grey[600])),
+                              Text("Tamanho:",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.grey[600])),
+                              Text("Cor:",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.grey[600])),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("${pet.age.toString()} anos",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)),
+                                Text("${pet.weight.toString()} cm",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)),
+                                Text(pet.color,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ),
             ),
-
-            // Life events and other sections
-            Life_Events_container(),
           ],
         ),
       ),
@@ -151,81 +193,32 @@ class Pet_profile extends StatelessWidget {
   }
 }
 
-class Life_Events_container extends StatelessWidget {
-  const Life_Events_container({
+class descriptionContainer extends StatelessWidget {
+  const descriptionContainer({
     super.key,
+    required this.pet,
   });
+
+  final PetModel pet;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
       child: Container(
+        width: 380,
+        height: 203,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(26)),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Text(
-                  "Life Events",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
-                ),
-              ),
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("2022:",
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[600])),
-                      Text("2020:",
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[600])),
-                      Text("2018:",
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[600])),
-                      Text("2016:",
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[600])),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Date",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold)),
-                        Text("Lived in New York",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold)),
-                        Text("Toilet trained",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold)),
-                        Text("Was welcomed home",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            ],
+          borderRadius: BorderRadius.circular(16),
+          color: Color(0xFF5BCF95),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(
+              style: TextStyle(color: Colors.white, fontSize: 16),
+              pet.name,
+            ),
           ),
         ),
       ),

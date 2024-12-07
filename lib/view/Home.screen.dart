@@ -17,8 +17,7 @@ class HomeScreen extends StatefulWidget {
   final String token;
   final String userId;
 
-  const HomeScreen({required this.token, required this.userId, Key? key})
-      : super(key: key);
+  const HomeScreen({required this.token, required this.userId, super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -112,6 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => Pet_profile(
                                     pet: item,
+                                    token: widget.token,
+                                    userId: widget.userId,
                                   ),
                                 ),
                               );
@@ -167,10 +168,10 @@ class BottomAppBarHome extends StatelessWidget {
   final String userId;
 
   const BottomAppBarHome({
-    Key? key,
+    super.key,
     required this.token,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -349,7 +350,7 @@ class Memorial_and_filter extends StatelessWidget {
 }
 
 class Profle_Container_Row extends StatelessWidget {
-  const Profle_Container_Row({Key? key}) : super(key: key);
+  const Profle_Container_Row({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -361,7 +362,7 @@ class Profle_Container_Row extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(right: 10, left: 10),
-      child: Container(
+      child: SizedBox(
         width: 380,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -393,7 +394,7 @@ class Profle_Container_Row extends StatelessWidget {
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
-                          " $userName!",
+                          "$userName!",
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -402,7 +403,7 @@ class Profle_Container_Row extends StatelessWidget {
                       ],
                     ),
                     const Text(
-                      "adote seus pets",
+                      "Adote e compartilhe pets",
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                   ],

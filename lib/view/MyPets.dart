@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adocaopets/http/http_client.dart';
-import 'package:flutter_adocaopets/repositories/pet_repositoriy.dart';
-import 'package:flutter_adocaopets/stores/pet_store.dart';
+import 'package:flutter_adocaopets/controllers/feed_user_pet_controller.dart';
+import 'package:flutter_adocaopets/models/Pet_model.dart';
 import 'package:flutter_adocaopets/view/Create_Pet1.dart';
 import 'package:flutter_adocaopets/view/Home.screen.dart';
 import 'package:flutter_adocaopets/view/Pet_Profile.dart';
@@ -9,28 +8,37 @@ import 'package:flutter_adocaopets/view/Profile_screen.dart';
 import 'package:flutter_adocaopets/widgets/card_horizontal_pet.dart';
 import 'package:flutter_adocaopets/widgets/search.input.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 
 class Mypets extends StatefulWidget {
   final String token;
   final String userId;
-  Mypets({required this.token, required this.userId, Key? key})
-      : super(key: key);
+
+  const Mypets({
+    required this.token,
+    required this.userId,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Mypets> createState() => _MypetsState();
 }
 
 class _MypetsState extends State<Mypets> {
-  final PetStore store = PetStore(
-    repository: PetRepository(
-      client: HttpClient(),
-    ),
-  );
+  late FeedUserPetController controller;
 
   @override
   void initState() {
     super.initState();
-    store.getPets();
+    controller = Provider.of<FeedUserPetController>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getUserPets(widget.token).catchError((error) {
+        print("Erro ao carregar pets na tela: $error");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erro ao carregar pets: $error")),
+        );
+      });
+    });
   }
 
   @override
@@ -45,34 +53,31 @@ class _MypetsState extends State<Mypets> {
           ),
           Search_input(),
           Expanded(
-            child: AnimatedBuilder(
-              animation:
-                  Listenable.merge([store.isLoading, store.erro, store.state]),
-              builder: (context, child) {
-                if (store.isLoading.value) {
+            child: Consumer<FeedUserPetController>(
+              builder: (context, controller, child) {
+                if (controller.isLoading) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
 
-                if (store.erro.value.isNotEmpty) {
+                if (controller.errorMessage.isNotEmpty) {
                   return Center(
                     child: Text(
-                      store.erro.value,
+                      controller.errorMessage,
                       style: TextStyle(
-                        color: Colors.black12,
+                        color: Colors.red,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 18,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   );
                 }
 
-                if (store.state.value.isEmpty) {
-                  return Center(
+                if (controller.pets.isEmpty) {
+                  return const Center(
                     child: Text(
-                      "Nenhum item na lista",
+                      "Nenhum pet encontrado",
                       style: TextStyle(
                         color: Colors.black12,
                         fontWeight: FontWeight.bold,
@@ -83,38 +88,37 @@ class _MypetsState extends State<Mypets> {
                   );
                 } else {
                   return Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
                     child: MasonryGridView.count(
                       crossAxisCount: 1,
                       mainAxisSpacing: 20,
                       crossAxisSpacing: 20,
-                      itemCount: store.state.value.length,
+                      itemCount: controller.pets.length,
                       itemBuilder: (context, index) {
-                        final item = store.state.value[index];
-
-                        final petImage = item.images.isNotEmpty
-                            ? item.images[0]
-                            : 'assets/default_image.png'; // Imagem padrão
+                        final PetModel item = controller.pets[index];
 
                         return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => Pet_profile(
-                                    pet: item,
-                                  ),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Pet_profile(
+                                  pet: item,
+                                  token: widget.token,
+                                  userId: widget.userId,
                                 ),
-                              );
-                            },
-                            child: CardHorizontalPet(pet: item));
+                              ),
+                            );
+                          },
+                          child: CardHorizontalPet(pet: item),
+                        );
                       },
                     ),
                   );
                 }
               },
             ),
-          )
+          ),
         ],
       ),
       bottomNavigationBar: BottomApp(
@@ -165,7 +169,7 @@ class BottomApp extends StatelessWidget {
                 'assets/icons/Paw.png',
                 width: 24,
                 height: 24,
-                color: Color(0xFF5250E1),
+                color: const Color(0xFF5250E1),
               ),
             ),
             IconButton(
@@ -203,6 +207,7 @@ class Title_and_CreatePetBtn_container extends StatelessWidget {
 
   final String token;
   final String userId;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -210,28 +215,29 @@ class Title_and_CreatePetBtn_container extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          const Text(
             "Meus pets",
             style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
           ),
           Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: Color(0xFF5250E1),
-              ),
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            Create_pet1(token: token, userId: userId),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.add),
-                  color: Colors.white))
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: const Color(0xFF5250E1),
+            ),
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Create_pet1(token: token),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.add),
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
     );

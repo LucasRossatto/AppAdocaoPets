@@ -5,13 +5,11 @@ import 'package:flutter_adocaopets/view/Create_pet3.dart';
 class Create_pet2 extends StatefulWidget {
   final String nomeCategorie;
   final String token;
-  final String userId;
 
   const Create_pet2({
     super.key,
     required this.nomeCategorie,
     required this.token,
-    required this.userId,
   });
 
   @override
@@ -24,7 +22,7 @@ class _Create_pet2State extends State<Create_pet2> {
   final TextEditingController weightController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController urlController = TextEditingController();
-  String? imageUrl;
+  String imageUrl = "";
 
   Future<bool> _validateImage(String url) async {
     try {
@@ -135,8 +133,7 @@ class _Create_pet2State extends State<Create_pet2> {
                 ],
               ),
             ),
-            if (imageUrl != null)
-              Padding(
+             Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
@@ -149,7 +146,7 @@ class _Create_pet2State extends State<Create_pet2> {
                       ),
                     ),
                     Image.network(
-                      imageUrl!,
+                      imageUrl,
                       height: 200,
                       width: 200,
                       fit: BoxFit.cover,
@@ -193,14 +190,11 @@ class _Create_pet2State extends State<Create_pet2> {
                         MaterialPageRoute(
                           builder: (context) => Create_Pet3(
                             token: widget.token,
-                            userId: widget.userId,
-                            petData: {
-                              "name": name,
-                              "age": age,
-                              "weight": weight,
-                              "color": color,
-                              "imageUrl": imageUrl!,
-                            },
+                            name: name,
+                            color: color,
+                            age: age,
+                            weight: weight,
+                            images: [imageUrl],
                           ),
                         ),
                       );

@@ -161,7 +161,7 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter your password';
+          return 'Digite uma senha';
         }
         return null;
       },

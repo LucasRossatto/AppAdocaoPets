@@ -6,9 +6,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class Create_pet1 extends StatefulWidget {
   final String token;
-  final String userId;
-  const Create_pet1({required this.token, required this.userId, Key? key})
-      : super(key: key);
+
+  const Create_pet1({required this.token, Key? key}) : super(key: key);
 
   @override
   State<Create_pet1> createState() => _Create_pet1State();
@@ -64,7 +63,8 @@ class _Create_pet1State extends State<Create_pet1> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => Create_pet2(
-                      nomeCategorie: selectedCategorie, token: widget.token, userId: widget.userId,
+                      nomeCategorie: selectedCategorie, 
+                      token: widget.token,
                     ),
                   ),
                 );

@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/models/Pet_model.dart';
 import 'package:http/http.dart' as http;
 
-class CreatePetController extends ChangeNotifier { 
-
-    final String apiUrlRegister =
+class CreatePetController extends ChangeNotifier {
+  final String apiUrlRegister =
       'https://pet-adopt-dq32j.ondigitalocean.app/pet/create';
 
   bool _isLoading = false;
@@ -24,10 +23,10 @@ class CreatePetController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Atualiza o usuário e estado de login
-  void _setPet(PetModel? user) {
+  // Atualiza o pet e estado de login
+  void _setPet(PetModel? pet) {
     _pet = pet;
-    _isLoggedIn = user != null;
+    _isLoggedIn = pet != null;
     _errorMessage = ''; // Limpa mensagens de erro
     notifyListeners();
   }
@@ -35,29 +34,29 @@ class CreatePetController extends ChangeNotifier {
   // Atualiza a mensagem de erro
   void _setError(String error) {
     _errorMessage = error;
-    _setPet(null); // Remove o usuário atual em caso de erro
+    _setPet(null);
     notifyListeners();
   }
 
-   Future<void> createPet({
-    required String userId,
+  Future<void> createPet({
+    required String token,
     required String name,
     required String color,
     required String age,
     required String weight,
     required List<String> images,
-
- 
   }) async {
-    
-
     _setLoading(true);
+
     try {
+      // Realiza a requisição POST
       final response = await http.post(
         Uri.parse(apiUrlRegister),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token', // Inclui token no header
+        },
         body: jsonEncode({
-          'userId': userId,
           'name': name,
           'color': color,
           'weight': weight,
@@ -66,17 +65,22 @@ class CreatePetController extends ChangeNotifier {
         }),
       );
 
-      if (response.statusCode == 200) {
+      // Verifica o código da resposta
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Decodifica a resposta e cria o modelo
         final petJson = jsonDecode(response.body);
         final pet = PetModel.fromJson(petJson);
         _setPet(pet);
       } else {
+        // Trata erros da API
         final errorJson = jsonDecode(response.body);
         _setError(errorJson['message'] ?? 'Erro ao criar Pet.');
       }
     } catch (e) {
+      // Trata erros genéricos de conexão ou parsing
       _setError('Erro de conexão: $e');
     } finally {
+      // Finaliza o estado de carregamento
       _setLoading(false);
     }
   }

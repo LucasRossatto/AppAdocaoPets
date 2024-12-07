@@ -92,7 +92,6 @@ class Profile_Screen extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/profile');
                 },
                 icon: Image.asset(
                   'assets/icons/Person.png',
@@ -218,7 +217,7 @@ class LogoutButton extends StatelessWidget {
         ),
       ),
       title: const Text(
-        "Logout",
+        "Desconectar",
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
@@ -245,7 +244,7 @@ class ThemeSwitch extends StatelessWidget {
             size: 24,
           )),
       title: Text(
-        "Light theme",
+        "Tema claro",
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
       trailing: SwtichBtn(),
@@ -268,7 +267,7 @@ class HelpInfo extends StatelessWidget {
             size: 24,
           )),
       title: Text(
-        "Help",
+        "Ajuda",
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     );
@@ -290,7 +289,7 @@ class Notifications extends StatelessWidget {
             size: 24,
           )),
       title: Text(
-        "Notifications",
+        "Notificações",
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     );
@@ -312,7 +311,7 @@ class EditAccount extends StatelessWidget {
             size: 24,
           )),
       title: Text(
-        "Edit Account",
+        "Editar conta",
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     );

@@ -34,5 +34,6 @@ class PetRepository implements IPetRepository {
     } else {
       throw Exception('Não foi possível carregar os pets');
     }
+
   }
 }

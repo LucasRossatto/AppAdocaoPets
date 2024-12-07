@@ -275,8 +275,7 @@ class Dont_have_account_SignUp extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text("Já tem uma conta?",
-              style: TextStyle(fontSize: 16)),
+          const Text("Já tem uma conta?", style: TextStyle(fontSize: 16)),
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(
@@ -287,7 +286,10 @@ class Dont_have_account_SignUp extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: Text(
                 "Entrar",
-                style: TextStyle(fontSize: 16, color: Color(0xFF5250E1),fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF5250E1),
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),

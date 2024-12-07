@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_adocaopets/controllers/create_pets_controller.dart';
+import 'package:provider/provider.dart';
 
 class Create_Pet3 extends StatefulWidget {
   final String token;
-  final String userId;
-  final Map<String, String> petData;
-  const Create_Pet3(
-      {super.key,
-      required this.token,
-      required this.userId,
-      required this.petData});
+  final String name;
+  final String color;
+  final String age;
+  final String weight;
+  final List<String> images;
+
+  const Create_Pet3({
+    super.key,
+    required this.token,
+    required this.name,
+    required this.color,
+    required this.age,
+    required this.weight,
+    required this.images,
+  });
 
   @override
   State<Create_Pet3> createState() => _Create_Pet3State();
@@ -18,8 +28,37 @@ class Create_Pet3 extends StatefulWidget {
 class _Create_Pet3State extends State<Create_Pet3> {
   String imageUrl = "";
 
+  @override
+  void initState() {
+    super.initState();
+
+    // Validar se os dados foram recebidos corretamente
+    if (widget.token.isEmpty ||
+        widget.name.isEmpty ||
+        widget.color.isEmpty ||
+        widget.age.isEmpty ||
+        widget.weight.isEmpty ||
+        widget.images.isEmpty) {
+      debugPrint("Erro: Dados não foram recebidos corretamente.");
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Erro ao carregar os dados do pet.")),
+        );
+        Navigator.of(context).pop(); 
+      });
+    } else {
+      debugPrint("Todos os dados foram recebidos com sucesso:");
+      //debugPrint("Token: ${widget.token}");
+      //debugPrint("Name: ${widget.name}");
+      //debugPrint("Color: ${widget.color}");
+      //debugPrint("Age: ${widget.age}");
+      //debugPrint("Weight: ${widget.weight}");
+      //debugPrint("Images: ${widget.images}");
+    }
+  }
+
   void _openInputDialog() {
-    String tempUrl = ""; // Variável temporária para armazenar a URL digitada
+    String tempUrl = "";
 
     showDialog(
       context: context,
@@ -42,7 +81,7 @@ class _Create_Pet3State extends State<Create_Pet3> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Fecha o diálogo sem salvar
+                Navigator.of(context).pop(); 
               },
               child: const Text("Cancelar"),
             ),
@@ -50,10 +89,10 @@ class _Create_Pet3State extends State<Create_Pet3> {
               onPressed: () {
                 if (tempUrl.isNotEmpty) {
                   setState(() {
-                    imageUrl = tempUrl; // Salva a URL digitada
+                    imageUrl = tempUrl;
                   });
                 }
-                Navigator.of(context).pop(); // Fecha o diálogo
+                Navigator.of(context).pop();
               },
               child: const Text("Salvar"),
             ),
@@ -81,7 +120,7 @@ class _Create_Pet3State extends State<Create_Pet3> {
         } else if (snapshot.hasData && snapshot.data == true) {
           return Column(
             children: [
-              Text(
+              const Text(
                 "Pré-visualização da imagem:",
                 style: TextStyle(
                     fontSize: 20,
@@ -106,8 +145,18 @@ class _Create_Pet3State extends State<Create_Pet3> {
     );
   }
 
+  void _printPetDetails() {
+    debugPrint("Token: ${widget.token}");
+    debugPrint("Name: ${widget.name}");
+    debugPrint("Color: ${widget.color}");
+    debugPrint("Age: ${widget.age}");
+    debugPrint("Weight: ${widget.weight}");
+    debugPrint("Images: ${widget.images.join(', ')}");
+  }
+
   @override
   Widget build(BuildContext context) {
+    Provider.of<CreatePetController>(context);
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -123,15 +172,6 @@ class _Create_Pet3State extends State<Create_Pet3> {
                 ),
               ],
             ),
-          ),
-          Column(
-            children: [
-              Text("Nome: ${widget.petData['name']}"),
-              Text("Idade: ${widget.petData['age']}"),
-              Text("Peso: ${widget.petData['weight']}"),
-              Text("Cor: ${widget.petData['color']}"),
-              Text(widget.petData['imageUrl']!),
-            ],
           ),
           Padding(
             padding: const EdgeInsets.all(38.0),
@@ -176,29 +216,73 @@ class _Create_Pet3State extends State<Create_Pet3> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      // Garantindo que a URL da imagem seja salva antes de navegar
+                    onPressed: () async {
                       if (imageUrl.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Por favor, adicione uma imagem."),
+                            content:
+                                Text("Por favor, adicione uma imagem de capa."),
+                            backgroundColor: Colors.red,
                           ),
                         );
                         return;
                       }
 
-                      // Atualiza a petData com a URL da imagem
-                      widget.petData['imageUrl'] = imageUrl;
+                      // Adiciona a URL da imagem na lista de imagens
+                      final updatedImages = List<String>.from(widget.images)
+                        ..add(imageUrl);
 
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Create_Pet3(
-                            token: widget.token,
-                            userId: widget.userId,
-                            petData: widget.petData,
-                          ),
+                      final petController = Provider.of<CreatePetController>(
+                          context,
+                          listen: false);
+
+                      // Exibe um indicador de carregamento
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) => const Center(
+                          child: CircularProgressIndicator(),
                         ),
                       );
+
+                      try {
+                        // Chama o método de criação do pet
+                        await petController.createPet(
+                          token: widget.token,
+                          name: widget.name,
+                          color: widget.color,
+                          age: widget.age,
+                          weight: widget.weight,
+                          images: updatedImages,
+                        );
+
+                        // Fecha o indicador de carregamento
+                        Navigator.of(context).pop();
+
+                        // Exibe uma mensagem de sucesso
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Pet cadastrado com sucesso!"),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+
+                        // Redireciona para outra página (ou volta para a anterior)
+                        Navigator.of(context)
+                            .pop(true); // Retorna um valor indicando sucesso
+                      } catch (e) {
+                        // Fecha o indicador de carregamento
+                        Navigator.of(context).pop();
+
+                        // Exibe mensagem de erro
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "Erro ao cadastrar o pet: ${e.toString()}"),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(364, 60),
@@ -208,11 +292,11 @@ class _Create_Pet3State extends State<Create_Pet3> {
                       ),
                     ),
                     child: const Text(
-                      'Cadastrar imagem',
+                      'Próximo',
                       style: TextStyle(
-                        fontSize: 16, // Tamanho da fonte
-                        fontWeight: FontWeight.bold, // Negrito
-                        color: Colors.white, // Cor do texto
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
                   ),

@@ -5,8 +5,6 @@ class CardHorizontalPet extends StatelessWidget {
   final PetModel pet;
   const CardHorizontalPet({super.key, required this.pet});
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Container(
