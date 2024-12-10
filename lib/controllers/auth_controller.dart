@@ -4,36 +4,38 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends ChangeNotifier {
+  // Variáveis de Estado
   bool isLoading = false;
   bool isLoggedIn = false;
   String errorMessage = '';
+
+  // URLs da API
   final String apiUrlLogin =
       'https://pet-adopt-dq32j.ondigitalocean.app/user/login';
 
+  // Dados do Usuário
   String? _token;
-  String? _userId; 
+  String? _userId;
+  Map<String, dynamic>? userDetails;
+
+  // Getters
   String? get token => _token;
   String? get userId => _userId;
-    Map<String, dynamic>? userDetails; 
 
-
-  // Função de login que retorna token e userId
+  // Função de Login
   Future<Map<String, String>?> signIn(String email, String password) async {
     if (email.isEmpty || password.isEmpty) {
       throw Exception('Email and password must not be empty');
     }
 
     try {
-      isLoading = true;
-      notifyListeners();
+      _setLoadingState(true);
 
       final response = await http.post(
         Uri.parse(apiUrlLogin),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'email': email, 'password': password}),
       );
-
-      print("Resposta bruta da API: ${response.body}");
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -43,56 +45,77 @@ class AuthController extends ChangeNotifier {
           _userId = data['userId'];
           await _storeCredentials(_token!, _userId!);
 
-          print("Token recebido: $_token, UserId recebido: $_userId");
-          return {'token': _token!, 'userId': _userId!}; 
+          return {'token': _token!, 'userId': _userId!};
         } else {
-          errorMessage = data['message'] ?? 'Erro desconhecido';
-          print("Mensagem de erro: $errorMessage");
+          _setError(data['message'] ?? 'Erro desconhecido');
           return null;
         }
       } else {
-        errorMessage = 'Falha no login: ${response.statusCode}';
-        print("Erro HTTP: $errorMessage");
+        _setError('Falha no login: ${response.statusCode}');
         return null;
       }
     } catch (e) {
-      errorMessage = 'Erro de rede: ${e.toString()}';
-      print("Erro ao tentar login: $errorMessage");
+      _setError('Erro de rede: $e');
       return null;
     } finally {
-      isLoading = false;
-      notifyListeners();
+      _setLoadingState(false);
     }
   }
 
-  // Função para armazenar token e userId no SharedPreferences
-  Future<void> _storeCredentials(String token, String userId) async {
+  // Função para Buscar Detalhes do Usuário
+  Future<void> fetchUserDetails(String userId, String token) async {
+    final String apiUrl =
+        'https://pet-adopt-dq32j.ondigitalocean.app/user/$userId';
+
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token); 
-      await prefs.setString('userId', userId);
-      notifyListeners();
+      _setLoadingState(true);
+
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        userDetails = json.decode(response.body);
+      } else {
+        _setError('Erro ao buscar detalhes do usuário: ${response.statusCode}');
+      }
     } catch (e) {
-      errorMessage = 'Failed to store credentials: $e';
-      notifyListeners();
+      _setError('Erro de rede: $e');
+    } finally {
+      _setLoadingState(false);
     }
   }
 
-  // Função para carregar token e userId do SharedPreferences
+  // Função para Carregar Credenciais do SharedPreferences
   Future<void> loadCredentials() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       _token = prefs.getString('token');
       _userId = prefs.getString('userId');
       isLoggedIn = _token != null && _userId != null;
-      notifyListeners();
     } catch (e) {
-      errorMessage = 'Failed to load credentials: $e';
+      _setError('Failed to load credentials: $e');
+    } finally {
       notifyListeners();
     }
   }
 
-  // Função para limpar token e userId
+  // Função para Armazenar Credenciais no SharedPreferences
+  Future<void> _storeCredentials(String token, String userId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+      await prefs.setString('userId', userId);
+    } catch (e) {
+      _setError('Failed to store credentials: $e');
+    }
+  }
+
+  // Função para Limpar Credenciais
   Future<void> clearCredentials() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -101,37 +124,21 @@ class AuthController extends ChangeNotifier {
       _token = null;
       _userId = null;
       isLoggedIn = false;
-      notifyListeners();
     } catch (e) {
-      errorMessage = 'Failed to clear credentials: $e';
+      _setError('Failed to clear credentials: $e');
+    } finally {
       notifyListeners();
     }
   }
 
-  Future<void> fetchUserDetails(String userId) async {
-    final String apiUrl = 'https://pet-adopt-dq32j.ondigitalocean.app/user/$userId';
-    try {
-      isLoading = true;
-      errorMessage = '';
-      notifyListeners();
+  // Funções Auxiliares
+  void _setLoadingState(bool state) {
+    isLoading = state;
+    notifyListeners();
+  }
 
-      final response = await http.get(
-        Uri.parse(apiUrl),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        userDetails = data;
-        print("Detalhes do usuário: $userDetails");
-      } else {
-        errorMessage = 'Erro ao buscar detalhes do usuário: ${response.statusCode}';
-      }
-    } catch (e) {
-      errorMessage = 'Erro de rede: $e';
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
+  void _setError(String message) {
+    errorMessage = message;
+    notifyListeners();
   }
 }

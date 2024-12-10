@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_adocaopets/controllers/create_pets_controller.dart';
+import 'package:flutter_adocaopets/view/Home.screen.dart';
+import 'package:flutter_adocaopets/view/MyPets.dart';
 import 'package:provider/provider.dart';
 
 class Create_Pet3 extends StatefulWidget {
@@ -44,7 +46,7 @@ class _Create_Pet3State extends State<Create_Pet3> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Erro ao carregar os dados do pet.")),
         );
-        Navigator.of(context).pop(); 
+        Navigator.of(context).pop();
       });
     } else {
       debugPrint("Todos os dados foram recebidos com sucesso:");
@@ -81,7 +83,7 @@ class _Create_Pet3State extends State<Create_Pet3> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
               child: const Text("Cancelar"),
             ),
@@ -161,17 +163,30 @@ class _Create_Pet3State extends State<Create_Pet3> {
       appBar: AppBar(),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 23),
+          const Padding(
+            padding: EdgeInsets.only(left: 23),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   "Escolha a foto\nde capa do seu pet",
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20,right: 10,bottom: 10),
+            child: Text(
+                          "Toque no icone abaixo para escolher a foto",
+
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Color(0xFF5250E1),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
           ),
           Padding(
             padding: const EdgeInsets.all(38.0),
@@ -198,11 +213,11 @@ class _Create_Pet3State extends State<Create_Pet3> {
               child: _buildImageWidget(imageUrl), // Valida e exibe a imagem
             ),
           const Padding(
-            padding: EdgeInsets.all(14.0),
+            padding: EdgeInsets.all(10.0),
             child: SizedBox(
               width: 330,
               child: Text(
-                "Após escolher a imagem de capa, já estamos na parte final do cadastro do seu pet",
+                "Após escolher a imagem de capa,\ntoque no botão abaixo para concluir o cadastro do seu pet",
                 style: TextStyle(
                   fontSize: 18,
                 ),
@@ -268,8 +283,14 @@ class _Create_Pet3State extends State<Create_Pet3> {
                         );
 
                         // Redireciona para outra página (ou volta para a anterior)
-                        Navigator.of(context)
-                            .pop(true); // Retorna um valor indicando sucesso
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => Mypets(
+                              token: widget.token,
+                              userId: '',
+                            ),
+                          ),
+                        );
                       } catch (e) {
                         // Fecha o indicador de carregamento
                         Navigator.of(context).pop();
@@ -292,7 +313,7 @@ class _Create_Pet3State extends State<Create_Pet3> {
                       ),
                     ),
                     child: const Text(
-                      'Próximo',
+                      'Adicionar Pet',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

@@ -5,11 +5,13 @@ import 'package:flutter_adocaopets/view/Create_pet3.dart';
 class Create_pet2 extends StatefulWidget {
   final String nomeCategorie;
   final String token;
+  final String userId;
 
   const Create_pet2({
     super.key,
     required this.nomeCategorie,
     required this.token,
+    required this.userId,
   });
 
   @override
@@ -88,7 +90,7 @@ class _Create_pet2State extends State<Create_pet2> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 23),
+              padding: const EdgeInsets.only(left: 23,bottom: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -102,61 +104,64 @@ class _Create_pet2State extends State<Create_pet2> {
                 ],
               ),
             ),
-            Padding(
+            InkWell(
+              onTap: () => _setImage(context),
+              child: Padding(
               padding: const EdgeInsets.only(left: 22, bottom: 10, top: 10),
-              child: Row(
-                children: [
-                  Container(
-                    width: 66,
-                    height: 66,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: const Color(0xFFEBF0F0),
-                    ),
-                    child: IconButton(
-                      onPressed: () => _setImage(context),
-                      icon: const Icon(Icons.image_outlined),
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      "Clique para escolher a foto do seu Pet",
-                      style: TextStyle(
-                        color: Color(0xFF5250E1),
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-             Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
+                child: Row(
                   children: [
-                    const Text(
-                      "Pré-visualização da imagem:",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF5250E1),
+                    Container(
+                      width: 66,
+                      height: 66,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: const Color(0xFFEBF0F0),
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.image_outlined),
+                        color: Colors.grey,
                       ),
                     ),
-                    Image.network(
-                      imageUrl,
-                      height: 200,
-                      width: 200,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Text("Falha ao carregar a imagem.");
-                      },
+                    const Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        "Clique para escolher a foto do seu Pet",
+                        style: TextStyle(
+                          color: Color(0xFF5250E1),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  const Text(
+                    "Pré-visualização da imagem:",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF5250E1),
+                    ),
+                  ),
+                  Image.network(
+                    imageUrl,
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Text("Falha ao carregar a imagem.");
+                    },
+                  ),
+                ],
+              ),
+            ),
             name_input(controller: nameController),
             age_input(controller: ageController),
             weight_input(controller: weightController),
@@ -176,7 +181,8 @@ class _Create_pet2State extends State<Create_pet2> {
                       if (name.isEmpty ||
                           age.isEmpty ||
                           weight.isEmpty ||
-                          color.isEmpty) {
+                          color.isEmpty ||
+                          imageUrl.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(

@@ -13,10 +13,13 @@ class CardPet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 182,
-      height: 250, // altura ajustada
+      height: 250,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(pet.images.isNotEmpty ? pet.images[0] : 'default_image_url'), // Exibe a primeira imagem, ou uma imagem default
+          image: NetworkImage(
+              // Pega a primeira imagem
+              pet.images.isNotEmpty ?
+              pet.images[0] : 'default_image_url'),
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.circular(26),
@@ -29,22 +32,15 @@ class CardPet extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.favorite,
                   color: Color(0xFFFC7171),
                   size: 24,
                 ),
                 Text(
-                  pet.age.toString(), // Cor do pet
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  " anos", // Cor do pet
-                  style: TextStyle(
+                  // Cor do pet
+                  "${pet.age.toString()} anos",
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -53,8 +49,9 @@ class CardPet extends StatelessWidget {
               ],
             ),
             Text(
-              pet.name, // Nome do pet
-              style: TextStyle(
+              // Nome do pet
+              pet.name,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 28,
                 fontWeight: FontWeight.bold,

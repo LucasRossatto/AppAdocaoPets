@@ -17,8 +17,8 @@ class Mypets extends StatefulWidget {
   const Mypets({
     required this.token,
     required this.userId,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<Mypets> createState() => _MypetsState();
@@ -157,7 +157,7 @@ class BottomApp extends StatelessWidget {
                 );
               },
               icon: Image.asset(
-                'assets/icons/Home.png',
+                'assets/icons/HomeOutlined.png',
                 width: 24,
                 height: 24,
                 color: Colors.black,
@@ -166,7 +166,7 @@ class BottomApp extends StatelessWidget {
             IconButton(
               onPressed: () {},
               icon: Image.asset(
-                'assets/icons/Paw.png',
+                'assets/icons/PawFilled.png',
                 width: 24,
                 height: 24,
                 color: const Color(0xFF5250E1),
@@ -230,7 +230,7 @@ class Title_and_CreatePetBtn_container extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => Create_pet1(token: token),
+                    builder: (context) => Create_pet1(token: token, userId: userId,),
                   ),
                 );
               },

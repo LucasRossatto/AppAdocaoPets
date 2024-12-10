@@ -1,55 +1,37 @@
 import 'package:flutter/material.dart';
 
-class SwtichBtn extends StatefulWidget {
-  const SwtichBtn({super.key});
+class SwitchBtn extends StatefulWidget {
+  const SwitchBtn({super.key});
 
   @override
-  State<SwtichBtn> createState() => _SwtichBtnState();
+  State<SwitchBtn> createState() => _SwitchBtnState();
 }
 
-class _SwtichBtnState extends State<SwtichBtn> {
-  bool light0 = true;
-  bool light1 = true;
+class _SwitchBtnState extends State<SwitchBtn> {
+  bool isSwitched = true;
+
   @override
   Widget build(BuildContext context) {
-    final MaterialStateProperty<Color?> trackColor =
-        MaterialStateProperty.resolveWith<Color?>(
-      (Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
-          return Color(0xFF5250E1);
-        }
-        return null;
-      },
-    );
-    final MaterialStateProperty<Color?> overlayColor =
-        MaterialStateProperty.resolveWith<Color?>(
-      (Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
-          return Color(0xFF5250E1).withOpacity(0.54);
-        }
-        if (states.contains(MaterialState.disabled)) {
-          return Colors.grey.shade400;
-        }
-        return null;
-      },
-    );
-
-    MaterialStateProperty.resolveWith<Icon?>(
-      (Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
-          return const Icon(Icons.check);
-        }
-        return const Icon(Icons.close);
-      },
-    );
-
     return Switch(
-      trackColor: trackColor,
-      overlayColor: overlayColor,
-      value: light0,
-      onChanged: (bool value) {
+      trackColor: WidgetStateProperty.resolveWith<Color?>(
+        (states) => states.contains(WidgetState.selected) ? const Color(0xFF5250E1) : null,
+      ),
+      overlayColor: WidgetStateProperty.resolveWith<Color?>(
+        (states) => states.contains(WidgetState.selected)
+            ? const Color(0xFF5250E1).withOpacity(0.54)
+            : states.contains(WidgetState.disabled)
+                ? Colors.grey.shade400
+                : null,
+      ),
+      thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+        (states) => states.contains(WidgetState.selected)
+            ? const Icon(Icons.check)
+            : const Icon(Icons.close),
+      ),
+      value: isSwitched,
+      onChanged: (value) {
         setState(() {
-          light0 = value;
+          isSwitched = value;
         });
       },
     );

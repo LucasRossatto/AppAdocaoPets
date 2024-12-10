@@ -17,11 +17,11 @@ class Pet_profile extends StatelessWidget {
   Widget build(BuildContext context) {
     // Seleciona a primeira imagem da lista de imagens do pet ou uma imagem padrão
     final petImage =
-        pet.images.isNotEmpty ? pet.images[0] : 'assets/default_image.png';
+        pet.images.isNotEmpty ? pet.images[0] : 'assets/icons/default_image.png';
 
     // Validação da imagem para o fundo
     final petBackdroop =
-        pet.images.length > 1 ? pet.images[1] : 'assets/default_image.png';
+        pet.images.length > 1 ? pet.images[1] : 'assets/icons/default_image.png';
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -125,7 +125,7 @@ class Pet_profile extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: Color(0xFFE1E6E6)),
                     borderRadius: BorderRadius.circular(26)),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20,right: 20,bottom: 20,top: 14),

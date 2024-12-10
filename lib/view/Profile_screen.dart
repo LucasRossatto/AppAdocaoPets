@@ -64,7 +64,7 @@ class Profile_Screen extends StatelessWidget {
                 );
               },
                 icon: Image.asset(
-                  'assets/icons/Home.png',
+                  'assets/icons/HomeOutlined.png',
                   width: 24,
                   height: 24,
                   color: Colors.black,
@@ -94,7 +94,7 @@ class Profile_Screen extends StatelessWidget {
                 onPressed: () {
                 },
                 icon: Image.asset(
-                  'assets/icons/Person.png',
+                  'assets/icons/PersonFilled.png',
                   width: 24,
                   height: 24,
                   color: const Color(0xFF5250E1),
@@ -162,7 +162,7 @@ class Header extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text(
-          "Account",
+          "Conta",
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
         Container(
@@ -207,24 +207,27 @@ class LogoutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const CircleAvatar(
-        backgroundColor: Colors.white,
-        child: Icon(
-          Icons.exit_to_app_rounded,
-          size: 24,
-          color: Color(0xFFFC7171),
+    return InkWell(
+      onTap: (){},
+      child: ListTile(
+        leading: const CircleAvatar(
+          backgroundColor: Colors.white,
+          child: Icon(
+            Icons.exit_to_app_rounded,
+            size: 24,
+            color: Color(0xFFFC7171),
+          ),
         ),
-      ),
-      title: const Text(
-        "Desconectar",
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Color(0xFFFC7171),
+        title: const Text(
+          "Desconectar",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFFC7171),
+          ),
         ),
+        onTap: () => logout(context),
       ),
-      onTap: () => logout(context),
     );
   }
 }
@@ -236,18 +239,21 @@ class ThemeSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ListTile(
-      leading: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Icon(
-            Icons.remove_red_eye_outlined,
-            size: 24,
-          )),
-      title: Text(
-        "Tema claro",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return InkWell(
+      onTap: (){},
+      child: const ListTile(
+        leading: CircleAvatar(
+            backgroundColor: Colors.white,
+            child: Icon(
+              Icons.remove_red_eye_outlined,
+              size: 24,
+            )),
+        title: Text(
+          "Tema claro",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        trailing: SwitchBtn(),
       ),
-      trailing: SwtichBtn(),
     );
   }
 }
@@ -259,16 +265,19 @@ class HelpInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ListTile(
-      leading: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Icon(
-            Icons.info_outline,
-            size: 24,
-          )),
-      title: Text(
-        "Ajuda",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return InkWell(
+      onTap: (){},
+      child: const ListTile(
+        leading: CircleAvatar(
+            backgroundColor: Colors.white,
+            child: Icon(
+              Icons.info_outline,
+              size: 24,
+            )),
+        title: Text(
+          "Ajuda",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
@@ -281,16 +290,19 @@ class Notifications extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ListTile(
-      leading: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Icon(
-            Icons.notifications_none_rounded,
-            size: 24,
-          )),
-      title: Text(
-        "Notificações",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return InkWell(
+      onTap: (){},
+      child: const ListTile(
+        leading: CircleAvatar(
+            backgroundColor: Colors.white,
+            child: Icon(
+              Icons.notifications_none_rounded,
+              size: 24,
+            )),
+        title: Text(
+          "Notificações",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
@@ -303,16 +315,19 @@ class EditAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ListTile(
-      leading: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Icon(
-            Icons.edit_outlined,
-            size: 24,
-          )),
-      title: Text(
-        "Editar conta",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return InkWell(
+      onTap: (){},
+      child: const ListTile(
+        leading: CircleAvatar(
+            backgroundColor: Colors.white,
+            child: Icon(
+              Icons.edit_outlined,
+              size: 24,
+            )),
+        title: Text(
+          "Editar conta",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

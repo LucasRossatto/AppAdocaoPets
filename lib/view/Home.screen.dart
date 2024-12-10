@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/controllers/auth_controller.dart';
 import 'package:flutter_adocaopets/controllers/feed_pet_controller.dart';
-import 'package:flutter_adocaopets/http/http_client.dart';
-import 'package:flutter_adocaopets/repositories/pet_repositoriy.dart';
-import 'package:flutter_adocaopets/stores/pet_store.dart';
 import 'package:flutter_adocaopets/view/MyPets.dart';
 import 'package:flutter_adocaopets/view/Pet_Profile.dart';
 import 'package:flutter_adocaopets/view/Profile_screen.dart';
@@ -20,27 +17,35 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({required this.token, required this.userId, super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late PetController _petController; // Declaração do controller
-  final PetStore store = PetStore(
-    repository: PetRepository(
-      client: HttpClient(),
-    ),
-  );
+  late final FeedPetController controller;
 
   @override
   void initState() {
     super.initState();
-    _petController = PetController(petStore: store); // Instancia o controller
-    _petController.fetchPets();
+    controller = Provider.of<FeedPetController>(context, listen: false);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getUserPets(widget.token).catchError((error) {
+        _showErrorSnackBar("Erro ao carregar pets: $error");
+      });
+
       Provider.of<AuthController>(context, listen: false)
-          .fetchUserDetails(widget.userId);
+          .fetchUserDetails(widget.userId, widget.token)
+          .catchError((error) {
+        _showErrorSnackBar(
+            "Erro ao carregar as informações do usuário: $error");
+      });
     });
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override
@@ -52,112 +57,156 @@ class _HomeScreenState extends State<HomeScreen> {
           const Profle_Container_Row(),
           const Search_input(),
           const Memorial_and_filter(),
-          const Cat_Container(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: PetEmDestaque(),
+          ),
           Expanded(
-            child: AnimatedBuilder(
-              animation:
-                  Listenable.merge([store.isLoading, store.erro, store.state]),
-              builder: (context, child) {
-                if (store.isLoading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                if (store.erro.value.isNotEmpty) {
-                  return Center(
-                    child: Text(
-                      store.erro.value,
-                      style: const TextStyle(
-                        color: Colors.black12,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                }
-
-                if (store.state.value.isEmpty) {
-                  return Center(
-                    child: Text(
-                      "Nenhum item na lista",
-                      style: TextStyle(
-                        color: Colors.black12,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                } else {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 20),
-                    child: MasonryGridView.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20,
-                      itemCount: store.state.value.length,
-                      itemBuilder: (context, index) {
-                        final item = store.state.value[index];
-                        final petImage = item.images.isNotEmpty
-                            ? item.images[0]
-                            : 'assets/default_image.png'; // Imagem padrão
-
-                        return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => Pet_profile(
-                                    pet: item,
-                                    token: widget.token,
-                                    userId: widget.userId,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: CardPet(pet: item));
-                      },
-                    ),
-                  );
-                }
-              },
-            ),
-          )
-
-          /*Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              child: MasonryGridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                itemCount: appPets.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Pet_profile(
-                            pet: appPets[index],
-                          ),
-                        ),
-                      );
-                    },
-                    child: CardPet(
-                      pet: appPets[index],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),*/
+            child: FeedPets(),
+          ),
         ],
       ),
       bottomNavigationBar: BottomAppBarHome(
         token: widget.token,
         userId: widget.userId,
+      ),
+    );
+  }
+
+  Widget PetEmDestaque() {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) {
+        if (controller.pets.isEmpty) return const SizedBox();
+
+        final firstPet = controller.pets.first;
+        return GestureDetector(
+          onTap: () {
+            navPetProfile(firstPet);
+          },
+          child: Container(
+            width: double.infinity,
+            height: 220,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: firstPet.images.isNotEmpty
+                    ? NetworkImage(firstPet.images[0])
+                    : const AssetImage('assets/default_image.png')
+                        as ImageProvider,
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(26),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.favorite, color: Color(0xFFFC7171)),
+                      Text(
+                        "${firstPet.age} anos",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    firstPet.name ?? "Nome desconhecido",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget FeedPets() {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        if (controller.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.errorMessage.isNotEmpty) {
+          return Center(
+            child: Text(
+              controller.errorMessage,
+              style: const TextStyle(
+                color: Colors.black12,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+
+        final pets = controller.pets;
+        if (pets.isEmpty) {
+          return const Center(
+            child: Text(
+              "Nenhum item na lista",
+              style: TextStyle(
+                color: Colors.black12,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: MasonryGridView.count(
+            crossAxisCount: 2,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 20,
+            itemCount: pets.length - 1,
+            itemBuilder: (context, index) {
+              final pet = pets[index + 1];
+
+              // Alterna entre dois tamanhos de altura
+              final cardHeight = (index % 2 == 0) ? 270.0 : 182.0;
+
+              return GestureDetector(
+                onTap: () {
+                  navPetProfile(pet);
+                },
+                child: SizedBox(
+                  height: cardHeight,
+                  child: CardPet(pet: pet),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void navPetProfile(pet) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Pet_profile(
+          pet: pet,
+          token: widget.token,
+          userId: widget.userId,
+        ),
       ),
     );
   }
@@ -235,8 +284,8 @@ class papagaio_container extends StatelessWidget {
             fit: BoxFit.cover, // Como a imagem deve se ajustar
           ),
           borderRadius: BorderRadius.circular(26)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
+      child: const Padding(
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -271,6 +320,7 @@ class papagaio_container extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class Dog_Container extends StatelessWidget {
   const Dog_Container({
     super.key,
@@ -287,8 +337,8 @@ class Dog_Container extends StatelessWidget {
             fit: BoxFit.cover, // Como a imagem deve se ajustar
           ),
           borderRadius: BorderRadius.circular(26)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
+      child: const Padding(
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -323,6 +373,7 @@ class Dog_Container extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class Memorial_and_filter extends StatelessWidget {
   const Memorial_and_filter({
     super.key,
@@ -335,7 +386,7 @@ class Memorial_and_filter extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          const Text(
             "Feed",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
@@ -349,6 +400,7 @@ class Memorial_and_filter extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class Profle_Container_Row extends StatelessWidget {
   const Profle_Container_Row({super.key});
 
@@ -358,7 +410,7 @@ class Profle_Container_Row extends StatelessWidget {
 
     // Acessando o nome corretamente
     final userName =
-        authController.userDetails?['user']?['name'] ?? 'Nome indefinido';
+        authController.userDetails?['user']?['name'] ?? 'Usuário não logado';
 
     return Padding(
       padding: const EdgeInsets.only(right: 10, left: 10),
@@ -390,11 +442,11 @@ class Profle_Container_Row extends StatelessWidget {
                     Row(
                       children: [
                         const Text(
-                          "Olá,",
+                          "Olá, ",
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
-                          "$userName!",
+                          "$userName",
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -435,12 +487,12 @@ class Cat_Container extends StatelessWidget {
         height: 220,
         decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(appImages.Cat), // Imagem asset
-              fit: BoxFit.cover, // Como a imagem deve se ajustar
+              image: AssetImage(appImages.Cat),
+              fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(26)),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        child: const Padding(
+          padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
