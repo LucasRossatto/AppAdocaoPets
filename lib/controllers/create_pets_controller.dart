@@ -4,7 +4,7 @@ import 'package:flutter_adocaopets/models/Pet_model.dart';
 import 'package:http/http.dart' as http;
 
 class CreatePetController extends ChangeNotifier {
-  // Url utilizada 
+  // Url utilizada
   final String apiUrlRegister =
       'https://pet-adopt-dq32j.ondigitalocean.app/pet/create';
 
@@ -46,6 +46,10 @@ class CreatePetController extends ChangeNotifier {
     required String age,
     required String weight,
     required List<String> images,
+    required String category,
+    required String breed,
+    required String story,
+    required String gender,
   }) async {
     _setLoading(true);
 
@@ -63,6 +67,10 @@ class CreatePetController extends ChangeNotifier {
           'weight': weight,
           'age': age,
           'images': images,
+          'breed': breed,
+          'gender': gender,
+          'story': story,
+          'category': category,
         }),
       );
 

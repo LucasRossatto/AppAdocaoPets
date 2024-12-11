@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_adocaopets/view/Create_pet3.dart';
+import 'package:flutter_adocaopets/widgets/input.dart';
 
 class Create_pet2 extends StatefulWidget {
   final String nomeCategorie;
   final String token;
   final String userId;
+  final String category;
 
   const Create_pet2({
     super.key,
     required this.nomeCategorie,
     required this.token,
     required this.userId,
+    required this.category,
   });
 
   @override
@@ -21,10 +25,14 @@ class Create_pet2 extends StatefulWidget {
 class _Create_pet2State extends State<Create_pet2> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
+  final TextEditingController breedController = TextEditingController();
+  final TextEditingController storyController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController urlController = TextEditingController();
+
   String imageUrl = "";
+  String? selectedGender; // Armazena o gênero selecionado
 
   Future<bool> _validateImage(String url) async {
     try {
@@ -90,7 +98,7 @@ class _Create_pet2State extends State<Create_pet2> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 23,bottom: 20),
+              padding: const EdgeInsets.only(left: 23, bottom: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -107,7 +115,7 @@ class _Create_pet2State extends State<Create_pet2> {
             InkWell(
               onTap: () => _setImage(context),
               child: Padding(
-              padding: const EdgeInsets.only(left: 22, bottom: 10, top: 10),
+                padding: const EdgeInsets.only(left: 22, bottom: 10, top: 10),
                 child: Row(
                   children: [
                     Container(
@@ -162,10 +170,63 @@ class _Create_pet2State extends State<Create_pet2> {
                 ],
               ),
             ),
-            name_input(controller: nameController),
-            age_input(controller: ageController),
-            weight_input(controller: weightController),
-            color_input(controller: colorController),
+            input(
+                controller: nameController,
+                placeholder: "Digite o nome do seu pet"),
+            input(
+                controller: breedController,
+                placeholder: "Digite a raça do seu pet"),
+            input(
+                controller: ageController,
+                placeholder: "Digite a idade do seu pet"),
+            input(
+                controller: weightController,
+                placeholder: "Digite o tamanho do seu pet em cm"),
+            input(
+                controller: colorController,
+                placeholder: "Digite a cor do seu pet"),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              child: SizedBox(
+                child: DropdownButtonFormField<String>(
+                  value: selectedGender,
+                  items: const [
+                    DropdownMenuItem(
+                      value: "male",
+                      child: Text("Macho"),
+                    ),
+                    DropdownMenuItem(
+                      value: "female",
+                      child: Text("Fêmea"),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      selectedGender = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: "Selecione o gênero",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFEBF0F0), width: 4.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFEBF0F0), width: 4.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                      borderSide: const BorderSide(
+                          color: Color(0xFF5250E1), width: 4.0),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 20, bottom: 20),
               child: Row(
@@ -177,16 +238,20 @@ class _Create_pet2State extends State<Create_pet2> {
                       final age = ageController.text.trim();
                       final weight = weightController.text.trim();
                       final color = colorController.text.trim();
+                      final breed = breedController.text.trim();
+                      final gender = selectedGender;
 
                       if (name.isEmpty ||
                           age.isEmpty ||
                           weight.isEmpty ||
                           color.isEmpty ||
-                          imageUrl.isEmpty) {
+                          imageUrl.isEmpty ||
+                          breed.isEmpty ||
+                          selectedGender == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
-                                "Por favor, preencha todos os campos e selecione uma imagem."),
+                                "Por favor, preencha todos os campos, selecione uma imagem e um gênero."),
                           ),
                         );
                         return;
@@ -201,6 +266,9 @@ class _Create_pet2State extends State<Create_pet2> {
                             age: age,
                             weight: weight,
                             images: [imageUrl],
+                            category: widget.category,
+                            gender: gender.toString(),
+                            breed: breed,
                           ),
                         ),
                       );
@@ -231,184 +299,4 @@ class _Create_pet2State extends State<Create_pet2> {
   }
 }
 
-class color_input extends StatelessWidget {
-  final TextEditingController controller;
-  const color_input({super.key, required this.controller});
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: SizedBox(
-        width: 364,
-        height: 60,
-        child: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFF5250E1), width: 4.0),
-            ),
-            label: Text('Digite a cor do pet',
-                style: TextStyle(
-                    color: Color.fromARGB(150, 48, 55, 66),
-                    fontWeight: FontWeight.bold)),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class weight_input extends StatelessWidget {
-  final TextEditingController controller;
-
-  const weight_input({
-    super.key,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: SizedBox(
-        width: 364,
-        height: 60,
-        child: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            filled: true, // Habilita a cor de fundo
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFF5250E1), width: 4.0),
-            ),
-
-            label: Text('Digite a altura do pet em cm',
-                style: TextStyle(
-                    color: Color.fromARGB(150, 48, 55, 66),
-                    fontWeight: FontWeight.bold)),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class age_input extends StatelessWidget {
-  final TextEditingController controller;
-
-  const age_input({
-    super.key,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: SizedBox(
-        width: 364,
-        height: 60,
-        child: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            filled: true, // Habilita a cor de fundo
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFF5250E1), width: 4.0),
-            ),
-
-            label: Text('Digite a idade do pet',
-                style: TextStyle(
-                    color: Color.fromARGB(150, 48, 55, 66),
-                    fontWeight: FontWeight.bold)),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class name_input extends StatelessWidget {
-  final TextEditingController controller;
-
-  const name_input({
-    super.key,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: SizedBox(
-        width: 364,
-        height: 60,
-        child: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            filled: true, // Habilita a cor de fundo
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFFEBF0F0), width: 4.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide:
-                  const BorderSide(color: Color(0xFF5250E1), width: 4.0),
-            ),
-            label: Text('Digite o nome do pet',
-                style: TextStyle(
-                    color: Color.fromARGB(150, 48, 55, 66),
-                    fontWeight: FontWeight.bold)),
-          ),
-        ),
-      ),
-    );
-  }
-}

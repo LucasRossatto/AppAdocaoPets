@@ -16,12 +16,14 @@ class Pet_profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Seleciona a primeira imagem da lista de imagens do pet ou uma imagem padrão
-    final petImage =
-        pet.images.isNotEmpty ? pet.images[0] : 'assets/icons/default_image.png';
+    final petImage = pet.images.isNotEmpty
+        ? pet.images[0]
+        : 'assets/icons/default_image.png';
 
     // Validação da imagem para o fundo
-    final petBackdroop =
-        pet.images.length > 1 ? pet.images[1] : 'assets/icons/default_image.png';
+    final petBackdroop = pet.images.length > 1
+        ? pet.images[1]
+        : 'assets/icons/default_image.png';
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -110,7 +112,7 @@ class Pet_profile extends StatelessWidget {
                         color: Color(0xFFFC7171),
                       ),
                       Text(
-                        pet.color,
+                        pet.gender,
                         style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                       ),
                     ],
@@ -120,7 +122,6 @@ class Pet_profile extends StatelessWidget {
             ),
             //Btns(),
             // Pet information box
-            //descriptionContainer(pet: pet),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
@@ -128,7 +129,8 @@ class Pet_profile extends StatelessWidget {
                     border: Border.all(color: Color(0xFFE1E6E6)),
                     borderRadius: BorderRadius.circular(26)),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20,right: 20,bottom: 20,top: 14),
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, bottom: 20, top: 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -145,15 +147,21 @@ class Pet_profile extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Idade:",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey[600])),
-                              Text("Tamanho:",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey[600])),
-                              Text("Cor:",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey[600])),
+                              Text(
+                                "Idade:",
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.grey[600]),
+                              ),
+                              Text(
+                                "Tamanho:",
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.grey[600]),
+                              ),
+                              Text(
+                                "Cor:",
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.grey[600]),
+                              ),
                             ],
                           ),
                           Padding(
@@ -161,21 +169,27 @@ class Pet_profile extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("${pet.age.toString()} anos",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold)),
-                                Text("${pet.weight.toString()} cm",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold)),
-                                Text(pet.color,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold)),
+                                Text(
+                                  "${pet.age.toString()} anos",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "${pet.weight.toString()} cm",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  pet.color,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
                           ),
@@ -186,6 +200,7 @@ class Pet_profile extends StatelessWidget {
                 ),
               ),
             ),
+            descriptionContainer(pet: pet),
           ],
         ),
       ),
@@ -217,7 +232,7 @@ class descriptionContainer extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Text(
               style: TextStyle(color: Colors.white, fontSize: 16),
-              pet.name,
+              pet.story,
             ),
           ),
         ),
@@ -240,16 +255,16 @@ class Btns extends StatelessWidget {
         children: [
           OutlinedButton(
             style: OutlinedButton.styleFrom(
-              minimumSize: Size(162, 52),
-              side: BorderSide(color: Color(0xFFFC7171)),
+              minimumSize: const Size(162, 52),
+              side: const BorderSide(color: Color(0xFFFC7171)),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
             ),
             onPressed: () {},
-            child: Row(
+            child: const Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(3.0),
+                  padding: EdgeInsets.all(3.0),
                   child: Icon(Icons.favorite, color: Color(0xFFFC7171)),
                 ),
                 Text("Love(1,162)",

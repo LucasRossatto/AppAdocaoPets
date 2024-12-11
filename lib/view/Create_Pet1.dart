@@ -61,11 +61,14 @@ class _Create_pet1State extends State<Create_pet1> {
             onNext: () {
               if (selectedIndex != null) {
                 final selectedCategorie =
-                    appPetCategorie[selectedIndex!].nomeCategorie; 
+                    appPetCategorie[selectedIndex!].nomeCategorie;
+                     final selectedCategorievalue =
+                    appPetCategorie[selectedIndex!].value; 
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => Create_pet2(
                       nomeCategorie: selectedCategorie, 
+                      category: selectedCategorievalue,
                       token: widget.token,
                       userId: widget.userId,
                     ),
