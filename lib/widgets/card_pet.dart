@@ -16,12 +16,12 @@ class CardPet extends StatelessWidget {
       height: 250,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(
-              // Pega a primeira imagem
-              pet.images.isNotEmpty ?
-              pet.images[0] : 'default_image_url'),
-          fit: BoxFit.cover,
-        ),
+                image: pet.images.isNotEmpty
+                    ? NetworkImage(pet.images[0])
+                    : const AssetImage('assets/icons/default_image.png')
+                        as ImageProvider,
+                fit: BoxFit.cover,
+              ),
         borderRadius: BorderRadius.circular(26),
       ),
       child: Padding(

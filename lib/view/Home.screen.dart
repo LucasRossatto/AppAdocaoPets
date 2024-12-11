@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_adocaopets/controllers/auth_controller.dart';
 import 'package:flutter_adocaopets/controllers/feed_pet_controller.dart';
@@ -17,6 +19,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({required this.token, required this.userId, super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeScreenState createState() => _HomeScreenState();
 }
 
@@ -52,18 +55,34 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          const Profle_Container_Row(),
-          const Search_input(),
-          const Memorial_and_filter(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: PetEmDestaque(),
+      body: CustomScrollView(
+        slivers: [
+          const SliverToBoxAdapter(
+            child:  Profle_Container_Row(),
           ),
-          Expanded(
-            child: FeedPets(),
+      
+          const SliverToBoxAdapter(
+            child:  Search_input(),
           ),
+      
+          const SliverToBoxAdapter(
+            child:  Memorial_and_filter(),
+          ),
+      
+          // Componente que desaparece ao rolar
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  PetEmDestaque(),
+                  FeedPets(),
+                ],
+              ),
+            ),
+          ),
+      
+        
         ],
       ),
       bottomNavigationBar: BottomAppBarHome(
@@ -91,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
               image: DecorationImage(
                 image: firstPet.images.isNotEmpty
                     ? NetworkImage(firstPet.images[0])
-                    : const AssetImage('assets/default_image.png')
+                    : const AssetImage('assets/icons/default_image.png')
                         as ImageProvider,
                 fit: BoxFit.cover,
               ),
@@ -117,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   Text(
-                    firstPet.name ?? "Nome desconhecido",
+                    firstPet.name,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 28,
@@ -171,28 +190,32 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: MasonryGridView.count(
-            crossAxisCount: 2,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 20,
-            itemCount: pets.length - 1,
-            itemBuilder: (context, index) {
-              final pet = pets[index + 1];
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: SingleChildScrollView(
+            child: MasonryGridView.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 20,
+              itemCount: pets.length - 1,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final pet = pets[index + 1];
 
-              // Alterna entre dois tamanhos de altura
-              final cardHeight = (index % 2 == 0) ? 270.0 : 182.0;
+                // Alterna entre dois tamanhos de altura
+                final cardHeight = (index % 2 == 0) ? 270.0 : 182.0;
 
-              return GestureDetector(
-                onTap: () {
-                  navPetProfile(pet);
-                },
-                child: SizedBox(
-                  height: cardHeight,
-                  child: CardPet(pet: pet),
-                ),
-              );
-            },
+                return GestureDetector(
+                  onTap: () {
+                    navPetProfile(pet);
+                  },
+                  child: SizedBox(
+                    height: cardHeight,
+                    child: CardPet(pet: pet),
+                  ),
+                );
+              },
+            ),
           ),
         );
       },
@@ -268,6 +291,7 @@ class BottomAppBarHome extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class papagaio_container extends StatelessWidget {
   const papagaio_container({
     super.key,

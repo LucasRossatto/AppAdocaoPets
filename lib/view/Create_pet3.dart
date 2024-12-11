@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_adocaopets/controllers/create_pets_controller.dart';
-import 'package:flutter_adocaopets/view/Home.screen.dart';
 import 'package:flutter_adocaopets/view/MyPets.dart';
 import 'package:provider/provider.dart';
 
+// ignore: camel_case_types
 class Create_Pet3 extends StatefulWidget {
   final String token;
   final String name;
@@ -27,6 +27,7 @@ class Create_Pet3 extends StatefulWidget {
   State<Create_Pet3> createState() => _Create_Pet3State();
 }
 
+// ignore: camel_case_types
 class _Create_Pet3State extends State<Create_Pet3> {
   String imageUrl = "";
 
@@ -147,6 +148,7 @@ class _Create_Pet3State extends State<Create_Pet3> {
     );
   }
 
+  // ignore: unused_element
   void _printPetDetails() {
     debugPrint("Token: ${widget.token}");
     debugPrint("Name: ${widget.name}");
@@ -175,8 +177,8 @@ class _Create_Pet3State extends State<Create_Pet3> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20,right: 10,bottom: 10),
+          const Padding(
+            padding: EdgeInsets.only(top: 20,right: 10,bottom: 10),
             child: Text(
                           "Toque no icone abaixo para escolher a foto",
 
